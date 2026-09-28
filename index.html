@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Malimbe by Beyond-A11y — accessibility, right on time</title>
+<link rel="icon" type="image/png" href="assets/malimbe-favicon-32.png">
+<meta name="description" content="Malimbe helps AI coding agents build accessible components and audit sites, repos, and unhosted code against WCAG 2.2 Level A and AA — inside your agentic coding tool. By Beyond-A11y.">
+<style>
+  :root{
+    color-scheme: light;
+    --bg:#f5f7ff;--surface:#ffffff;--surface2:#f7f9ff;--ink:#111827;--muted:#5b6475;
+    --line:#dce3f0;--accent:#2f5dff;--accent-ink:#ffffff;--accent-strong:#df3336;--pass:#2f8f5b;--warn:#b85f13;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    --shadow:0 18px 42px rgba(47, 93, 255, 0.12);
+    --header-bg:rgba(255,255,255,.92);
+    --code-color:#0f172a;
+    --code-bg:#f8fafc;
+  }
+  :root[data-theme="dark"]{
+    color-scheme: dark;
+    --bg:#07111d;--surface:#111c2a;--surface2:#17263a;--ink:#f3f6fb;--muted:#a8b4c2;
+    --line:#263548;--accent:#7fa2ff;--accent-ink:#07111d;--accent-strong:#ff7a7a;--pass:#5cd69a;--warn:#f5b14c;
+    --shadow:0 20px 45px rgba(3, 10, 20, 0.32);
+    --header-bg:rgba(7,17,29,.92);
+    --code-color:#f8fbff;
+    --code-bg:#060b14;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:radial-gradient(circle at top left,rgba(47,93,255,.15),transparent 34%),var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;font-size:17px}
+  a{color:var(--accent)}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+  .skip{position:absolute;left:-9999px;top:0;background:var(--accent);color:var(--accent-ink);padding:10px 16px;border-radius:0 0 8px 0;font-weight:700;z-index:10}
+  .skip:focus{left:0}
+  :focus-visible{outline:3px solid var(--warn);outline-offset:3px;border-radius:3px}
+  header.site{border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--header-bg);backdrop-filter:blur(8px);z-index:5}
+  header.site .wrap{display:flex;align-items:center;justify-content:space-between;min-height:64px;gap:16px}
+  .brand{font-weight:800;letter-spacing:-.02em;font-size:20px;display:flex;align-items:center;gap:10px}
+  .brand span{color:var(--accent)}
+  nav.top a{color:var(--ink);text-decoration:none;margin-left:22px;font-size:15px}
+  nav.top a:hover{color:var(--accent)}
+  .theme-toggle{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 12px;font:inherit;font-weight:600;cursor:pointer}
+  .theme-toggle:hover,.theme-toggle:focus-visible{border-color:var(--accent);color:var(--accent)}
+  @media(max-width:640px){nav.top{display:none}}
+  .hero{padding:72px 0 56px;text-align:center}
+  .eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 14px}
+  h1{font-size:clamp(32px,6vw,56px);line-height:1.05;letter-spacing:-.03em;margin:0 0 18px;font-weight:800}
+  .lede{font-size:clamp(18px,2.4vw,22px);color:var(--muted);max-width:60ch;margin:0 auto 30px}
+  .cta{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:var(--accent-ink);font-weight:700;
+    text-decoration:none;padding:14px 26px;border-radius:999px;font-size:17px;min-height:48px;box-shadow:var(--shadow)}
+  .cta.secondary{background:transparent;color:var(--ink);border:1px solid var(--line);margin-left:12px;box-shadow:none}
+  .cta.secondary:hover{border-color:var(--accent);color:var(--accent)}
+  .cta:hover{filter:brightness(1.08)}
+  .trust{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface);padding:20px 0}
+  .trust p{margin:0;text-align:center;color:var(--muted);font-size:15px}
+  .trust strong{color:var(--ink)}
+  section{padding:64px 0}
+  h2{font-size:clamp(26px,4vw,36px);letter-spacing:-.02em;margin:0 0 14px;font-weight:800}
+  .section-intro{color:var(--muted);max-width:64ch;margin:0 0 36px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:820px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px}
+  .card h3{margin:0 0 10px;font-size:20px;letter-spacing:-.01em}
+  .card p{margin:0;color:var(--muted);font-size:15.5px}
+  .kicker{font-family:var(--mono);font-size:12px;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;margin:0 0 12px}
+  .split{display:grid;grid-template-columns:1.1fr .9fr;gap:44px;align-items:center}
+  @media(max-width:820px){.split{grid-template-columns:1fr;gap:28px}}
+  .panel{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:24px}
+  .panel h3{margin:0 0 12px}
+  ul.checks{list-style:none;padding:0;margin:0}
+  ul.checks li{padding:8px 0 8px 30px;position:relative;color:var(--muted)}
+  ul.checks li::before{content:"";position:absolute;left:0;top:14px;width:14px;height:8px;border-left:2.5px solid var(--pass);border-bottom:2.5px solid var(--pass);transform:rotate(-45deg)}
+  pre{background:var(--code-bg);color:var(--code-color);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;margin:0}
+  code{font-family:var(--mono);font-size:14px;color:var(--code-color)}
+  .quote{border-left:3px solid var(--accent);padding:6px 0 6px 22px;margin:26px 0;font-size:20px;color:var(--ink)}
+  .honest{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px;margin-top:20px}
+  .honest h3{margin:0 0 10px}
+  .honest p{margin:0;color:var(--muted)}
+  .access{text-align:center;background:linear-gradient(180deg,var(--surface),var(--bg));border:1px solid var(--line);border-radius:18px;padding:52px 24px}
+  .badge{display:inline-block;font-family:var(--mono);font-size:12px;color:var(--warn);border:1px solid var(--warn);border-radius:999px;padding:4px 12px;margin-bottom:18px;letter-spacing:.08em}
+  footer.site{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:14px}
+  footer.site .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+  @media(forced-colors:active){.card,.panel,.honest,.access{border:1px solid CanvasText}.cta{border:1px solid ButtonText}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><img src="assets/malimbe-favicon-32.png" alt="" width="28" height="28">Malimbe <span>by Beyond-A11y</span></div>
+    <nav class="top" aria-label="Primary">
+      <a href="#what">What it does</a>
+      <a href="#fit">How it fits</a>
+      <a href="#why">Why Malimbe</a>
+      <a href="#access">Get access</a>
+    </nav>
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false">🌙 Dark mode</button>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" aria-labelledby="h1">
+    <div class="wrap">
+      <p class="eyebrow">Accessibility, right on time</p>
+      <h1 id="h1">Ship accessible UI at the speed of AI coding.</h1>
+      <p class="lede">Malimbe plugs into your agentic coding tool to help it <strong>build</strong> accessible components, <strong>review</strong> your work before it's hosted, and <strong>govern</strong> a design system — measured against WCAG 2.2 Level A and AA.</p>
+      <a class="cta" href="https://github.com/beyond-a11y/malimbeba-releases/releases/latest">Download the beta</a>
+      <a class="cta secondary" href="#what">See what it does</a>
+    </div>
+  </section>
+
+  <div class="trust" role="region" aria-label="At a glance">
+    <div class="wrap"><p>Built by a <strong>15-year accessibility practitioner</strong> · Works with <strong>Claude Code, Codex, Cursor, VS Code</strong> · <strong>Assists and gates</strong> — never claims to guarantee compliance.</p></div>
+  </div>
+
+  <section id="what" aria-labelledby="what-h">
+    <div class="wrap">
+      <p class="kicker">What it does</p>
+      <h2 id="what-h">Three jobs, one tool.</h2>
+      <p class="section-intro">Malimbe is an MCP server plus encoded expertise. It rides inside the coding agent you already use, so accessibility happens where the code is written — not in a scan after the fact.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Build</h3>
+          <p>Describe a component in plain words. Malimbe maps it to the correct ARIA pattern and writes a prompt carrying the full keyboard and focus contract — the parts agents usually get wrong.</p>
+        </div>
+        <div class="card">
+          <h3>Review</h3>
+          <p>Audit a live site, an internal URL, a repo, or code that isn't hosted yet — served locally and scanned for real. Findings ranked by how badly they block a user, not raw counts.</p>
+        </div>
+        <div class="card">
+          <h3>Govern</h3>
+          <p>A release gate with enforced provenance, a component manifest that remembers verdicts and expires exceptions, and consistency checks across a whole design system.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="fit" aria-labelledby="fit-h" style="background:var(--surface)">
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <p class="kicker">How it fits</p>
+          <h2 id="fit-h">One line in your editor config.</h2>
+          <p class="section-intro">Malimbe is model- and platform-agnostic. The same package serves every agentic surface through the standard MCP protocol — no lock-in to one assistant.</p>
+          <ul class="checks">
+            <li>Ships pre-built — install the package, no compiling on your end</li>
+            <li>Finds your installed Chrome or Edge automatically; no forced downloads, no mysterious hangs</li>
+            <li><code>malimbeba doctor</code> hands you your exact, ready-to-paste editor config — no path-guessing</li>
+            <li>Static checks always work, even with no browser present</li>
+          </ul>
+        </div>
+        <div class="panel" aria-label="Example configuration">
+          <h3 style="font-size:16px">Install, then let doctor configure your editor</h3>
+          <pre><code>npm install -g ./malimbeba-0.3.9.tgz
+malimbeba doctor</code></pre>
+          <p style="font-size:14px;color:var(--muted);margin:12px 0 0">Prints your MCP config with the correct path already filled in for your install — copy it as-is into your editor.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="why" aria-labelledby="why-h">
+    <div class="wrap">
+      <p class="kicker">Why Malimbe</p>
+      <h2 id="why-h">Honest about what a machine can and can't verify.</h2>
+      <p class="section-intro">Most accessibility tooling either flags defects after the fact or overpromises "one-click compliance." Malimbe does neither. It works where code is generated, enforces evidence, and is candid about its limits.</p>
+      <blockquote class="quote">Automated checks are necessary, not sufficient. Malimbe tells you what it verified, what it couldn't, and what still needs a human.</blockquote>
+      <div class="honest">
+        <h3>The provenance gate</h3>
+        <p>Every release verdict is tied to a named, auditable artifact — a deployed URL, a package version, a build SHA. Pasted or unverifiable code can't pass the automated gate. It's a direct, enforced answer to the fair question "can I trust an AI to judge accessibility?"</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="access" aria-labelledby="access-h" style="background:var(--surface)">
+    <div class="wrap">
+      <div class="access">
+        <span class="badge">Early access · v0.4 beta</span>
+        <h2 id="access-h">Bring accessibility into your agentic workflow.</h2>
+        <p class="section-intro" style="margin:0 auto 28px">Download the beta and try it free for 30 days, no request form, no waiting. Install the package, run one command, and you have a ready-to-paste MCP configuration. Purchase a license before the 30 days end to keep going without interruption.</p>
+        <a class="cta" href="https://github.com/beyond-a11y/malimbeba-releases/releases/latest">Download the beta</a>
+        <a class="cta secondary" href="mailto:info@beyond-a11y.com?subject=Malimbe%20license">Ask about a license</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="yr"></span> Beyond-A11y · <a href="https://www.beyond-a11y.com">beyond-a11y.com</a></div>
+    <div>Malimbe assists and gates. It does not guarantee legal compliance.</div>
+  </div>
+</footer>
+<script>
+(function () {
+  const root = document.documentElement;
+  const toggle = document.getElementById('theme-toggle');
+  const storedTheme = localStorage.getItem('malimbeba-ui-theme');
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const initialTheme = storedTheme || (systemPrefersDark ? 'dark' : 'light');
+  const applyTheme = (theme) => {
+    root.setAttribute('data-theme', theme);
+    if (toggle) {
+      toggle.textContent = theme === 'dark' ? '☀ Light mode' : '🌙 Dark mode';
+      toggle.setAttribute('aria-pressed', String(theme === 'dark'));
+    }
+    localStorage.setItem('malimbeba-ui-theme', theme);
+  };
+  applyTheme(initialTheme);
+  if (toggle) {
+    toggle.addEventListener('click', () => applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+  }
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+    if (!localStorage.getItem('malimbeba-ui-theme')) {
+      applyTheme(event.matches ? 'dark' : 'light');
+    }
+  });
+  document.getElementById('yr').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
