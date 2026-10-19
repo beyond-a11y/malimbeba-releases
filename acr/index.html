@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="canonical" href="https://beyond-a11y.github.io/malimbeba-releases/acr/">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/malimbe-favicon-32.png">
+<title>Malimbe by Beyond A11y — Accessibility Conformance Report (VPAT 2.5 WCAG)</title>
+<meta name="description" content="Accessibility Conformance Report (VPAT 2.5Rev, WCAG edition) for Malimbe by Beyond A11y, covering WCAG 2.0, 2.1 and 2.2 Level A and AA.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600;700&display=swap">
+<style>
+:root{color-scheme:light;--bg:#f7f8f6;--paper:#ffffff;--fg:#1b2420;--muted:#4f5c56;--line:#d5dcd8;--accent:#0b6a55;--accent-ink:#ffffff;--ok-bg:#e3f2ec;--ok-fg:#0b5a47;--na-bg:#eceeed;--na-fg:#3f4844;--focus:#b45309;--legal:#f1f3f2}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121816;--paper:#18201d;--fg:#e4ebe7;--muted:#a3b1aa;--line:#33403a;--accent:#5fd0b2;--accent-ink:#0b1512;--ok-bg:#163a30;--ok-fg:#9fe6d0;--na-bg:#252d2a;--na-fg:#c5cfca;--focus:#fbbf24;--legal:#1d2623;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121816;--paper:#18201d;--fg:#e4ebe7;--muted:#a3b1aa;--line:#33403a;--accent:#5fd0b2;--accent-ink:#0b1512;--ok-bg:#163a30;--ok-fg:#9fe6d0;--na-bg:#252d2a;--na-fg:#c5cfca;--focus:#fbbf24;--legal:#1d2623;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:1rem;line-height:1.6}
+.wrap{max-width:68rem;margin:0 auto;padding-block:2rem 4rem;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.skip{position:absolute;left:-9999px;top:0}
+.skip:focus{left:max(16px,env(safe-area-inset-left,0px));top:calc(env(safe-area-inset-top,0px) + 8px);background:var(--accent);color:var(--accent-ink);padding:.5rem .9rem;border-radius:4px;z-index:10}
+a{color:var(--accent);text-underline-offset:2px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+header.top{border-bottom:2px solid var(--fg);padding-bottom:1.25rem;margin-bottom:1.5rem;display:grid;gap:.4rem}
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0}
+h1{font-size:clamp(1.7rem,4vw,2.4rem);line-height:1.15;margin:0;text-wrap:balance}
+.sub{margin:0;color:var(--muted);max-width:65ch}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));gap:.75rem;margin:1.5rem 0 2rem;padding:0;list-style:none}
+.summary li{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:.85rem 1rem;display:grid;gap:.1rem}
+.summary b{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:1.6rem;line-height:1.1}
+.summary span{color:var(--muted);font-size:.88rem}
+nav.toc{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:1rem 1.25rem;margin-bottom:2rem}
+nav.toc h2{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;margin:0 0 .4rem;border:0;padding:0;color:var(--muted)}
+nav.toc ol{margin:0;padding-left:1.25rem;display:grid;gap:.2rem}
+h2{font-size:1.4rem;margin:2.5rem 0 .75rem;padding-top:.5rem;border-top:1px solid var(--line);text-wrap:balance}
+h3{font-size:1.1rem;margin:1.75rem 0 .5rem}
+main p,main li{max-width:72ch}
+code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.88em;background:var(--na-bg);padding:.05em .3em;border-radius:3px;overflow-wrap:anywhere}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--paper);margin:1rem 0}
+table{border-collapse:collapse;width:100%;font-size:.94rem}
+th,td{text-align:left;vertical-align:top;padding:.65rem .8rem;border-bottom:1px solid var(--line)}
+thead th{font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--legal);white-space:nowrap}
+tbody tr:last-child>*{border-bottom:0}
+tbody th{font-weight:600}
+table.crit{min-width:44rem}
+table.crit tbody th{width:13rem}
+table.crit td:nth-child(2){width:9rem}
+.lvl{display:inline-block;font-weight:600;font-size:.85rem;padding:.12rem .5rem;border-radius:999px;white-space:nowrap}
+.lvl.ok{background:var(--ok-bg);color:var(--ok-fg)}
+.lvl.na{background:var(--na-bg);color:var(--na-fg)}
+.legal{background:var(--legal);border-left:4px solid var(--fg);padding:.25rem 1.25rem 1rem;margin-top:2.5rem}
+.legal h2{border-top:0}
+footer{margin-top:3rem;border-top:2px solid var(--fg);padding-top:1rem;color:var(--muted);font-size:.9rem;display:grid;gap:.25rem}
+@media (max-width:600px){h2{font-size:1.25rem}}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#content">Skip to main content</a>
+<div class="wrap">
+<header class="top">
+<p class="eyebrow">Accessibility Conformance Report · WCAG Edition · VPAT® 2.5Rev</p>
+<h1>Malimbe by Beyond A11y Accessibility Conformance Report</h1>
+<p class="sub">WCAG 2.0, 2.1 and 2.2, Levels A and AA. Tested build: commit <code>f04f234</code>, 2026-10-12 to 2026-10-13. Report date October 14, 2026.</p>
+</header>
+<main id="content" tabindex="-1">
+<ul class="summary" aria-label="Results at a glance">
+<li><b>56</b><span>A and AA criteria evaluated</span></li>
+<li><b>36</b><span>Supports</span></li>
+<li><b>20</b><span>Not Applicable</span></li>
+<li><b>0</b><span>Partially Supports or Does Not Support</span></li>
+</ul>
+<nav class="toc" aria-labelledby="toc-h"><h2 id="toc-h">Contents</h2><ol><li><a href="#scope-and-evaluation-methods">Scope and evaluation methods</a></li>
+<li><a href="#table-1-success-criteria-level-a">Table 1: Success Criteria, Level A</a></li>
+<li><a href="#table-2-success-criteria-level-aa">Table 2: Success Criteria, Level AA</a></li>
+<li><a href="#table-3-success-criteria-level-aaa">Table 3: Success Criteria, Level AAA</a></li>
+<li><a href="#legal-disclaimer-beyond-a11y-llc">Legal Disclaimer (Beyond-A11y, LLC)</a></li></ol></nav>
+<p><strong>WCAG Edition</strong> — based on VPAT® Version 2.5Rev (ITI)</p>
+<div class="table-wrap" role="region" tabindex="0" aria-label="Report information"><table aria-label="Report information">
+<thead>
+<tr>
+<th scope="col">Field</th>
+<th scope="col">Entry</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">Name of Product/Version</th>
+<td>Malimbe by Beyond A11y (beta) — repository beyond-a11y/malimbeba, branch main, commit f04f234; untagged build (package.json reads 0.4.3, but the tested fixes postdate the 0.4.3 tag of 2026-10-06)</td>
+</tr>
+<tr>
+<th scope="row">Report Date</th>
+<td>October 14, 2026</td>
+</tr>
+<tr>
+<th scope="row">Product Description</th>
+<td>Malimbe is an accessibility toolkit for developers who build software with AI coding assistants. It runs as a Model Context Protocol (MCP) server inside tools such as Claude Code, Codex, Cursor and VS Code, and provides accessibility auditing (axe-core, WCAG 2.2 A and AA), pre-release review of unhosted code, release gating, and component guidance. It includes three browser-based interfaces: a guided prompt builder, an expert prompt builder, and a component tester.</td>
+</tr>
+<tr>
+<th scope="row">Contact Information</th>
+<td>Beyond-A11y, LLC — info@beyond-a11y.com — 833-239-6632 — beyond-a11y.com</td>
+</tr>
+<tr>
+<th scope="row">Notes</th>
+<td>This report covers Malimbe's own user interfaces and outputs, not the accessibility of sites that Malimbe audits. Malimbe runs inside third-party host applications; the accessibility of those hosts is outside this report.</td>
+</tr>
+<tr>
+<th scope="row">Evaluation Methods Used</th>
+<td>See "Scope and evaluation methods" below.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="applicable-standards-guidelines">Applicable Standards/Guidelines</h3>
+<div class="table-wrap" role="region" tabindex="0" aria-labelledby="applicable-standards-guidelines"><table aria-labelledby="applicable-standards-guidelines">
+<thead>
+<tr>
+<th scope="col">Standard/Guideline</th>
+<th scope="col">Included in Report</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">Web Content Accessibility Guidelines 2.0</th>
+<td>Level A (Yes), Level AA (Yes), Level AAA (No)</td>
+</tr>
+<tr>
+<th scope="row">Web Content Accessibility Guidelines 2.1</th>
+<td>Level A (Yes), Level AA (Yes), Level AAA (No)</td>
+</tr>
+<tr>
+<th scope="row">Web Content Accessibility Guidelines 2.2</th>
+<td>Level A (Yes), Level AA (Yes), Level AAA (No)</td>
+</tr>
+</tbody>
+</table></div>
+<p>WCAG 2.2 A and AA include every 2.0 and 2.1 A and AA success criterion except 4.1.1 Parsing, which 2.2 removed. One set of tables below therefore covers all three versions, with the version noted per criterion.</p>
+<h3 id="terms">Terms</h3>
+<ul>
+<li><strong>Supports:</strong> The functionality of the product has at least one method that meets the criterion without known defects or meets with equivalent facilitation.</li>
+<li><strong>Partially Supports:</strong> Some functionality of the product does not meet the criterion.</li>
+<li><strong>Does Not Support:</strong> The majority of product functionality does not meet the criterion.</li>
+<li><strong>Not Applicable:</strong> The criterion is not relevant to the product.</li>
+<li><strong>Not Evaluated:</strong> The product has not been evaluated against the criterion. Used only for WCAG Level AAA.</li>
+</ul>
+<h2 id="scope-and-evaluation-methods">Scope and evaluation methods</h2>
+<h3 id="components-in-scope">Components in scope</h3>
+<div class="table-wrap" role="region" tabindex="0" aria-labelledby="components-in-scope"><table aria-labelledby="components-in-scope">
+<thead>
+<tr>
+<th scope="col">Component</th>
+<th scope="col">Type</th>
+<th scope="col">In scope</th>
+<th scope="col">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">Guided prompt builder (guided.html)</th>
+<td>Web interface</td>
+<td>Yes</td>
+<td>Default entry point; plain-language prompt building and audit-check mode</td>
+</tr>
+<tr>
+<th scope="row">Expert prompt builder (index.html)</th>
+<td>Web interface</td>
+<td>Yes</td>
+<td>Tested in both Generate mode and Audit mode (the conditionally shown audit form)</td>
+</tr>
+<tr>
+<th scope="row">Component tester (component-tester.html)</th>
+<td>Web interface</td>
+<td>Yes</td>
+<td>Renders pasted component code in an isolated frame and lists findings</td>
+</tr>
+<tr>
+<th scope="row">Audit reports</th>
+<td>Text shown in the expert view</td>
+<td>Yes, via the expert view</td>
+<td>The rendered audit report is plain text written into the same output element (<code>&lt;pre id="prompt"&gt;</code>) already covered by the expert-view tests; no separate interface</td>
+</tr>
+<tr>
+<th scope="row">Command-line readiness check (<code>malimbeba-doctor</code>)</th>
+<td>Terminal output</td>
+<td>No — excluded</td>
+<td>It produces terminal text, not web content, so WCAG's web-content criteria don't apply to it</td>
+</tr>
+<tr>
+<th scope="row">Host applications (Claude Code, Codex, Cursor, VS Code)</th>
+<td>Third-party software</td>
+<td>No</td>
+<td>Outside Beyond-A11y's control</td>
+</tr>
+<tr>
+<th scope="row">Marketing website and landing page</th>
+<td>Web</td>
+<td>No</td>
+<td>Not part of the licensed product</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Mobile screen readers are out of scope.</strong> VoiceOver on iOS and TalkBack on Android are outside this report's scope for Malimbe entirely. Desktop VoiceOver on macOS remains in scope and is reported as Not Evaluated (see the disclosure below), not as out of scope.</p>
+<h3 id="evaluation-methods">Evaluation methods</h3>
+<p>Testing was performed on 2026-10-12 and 2026-10-13 against the three browser-based interfaces, served locally (<code>node ui/server.mjs</code>, <code>http://127.0.0.1:4173/</code>).</p>
+<ol>
+<li><strong>Automated testing.</strong> Real-browser axe-core scan (Playwright, WCAG 2.2 A and AA) via Malimbe's <code>a11y_audit_axe</code> tool, on all three interfaces. axe-core 4.12.1; Google Chrome 155.0.8059.40 (real, installed browser).</li>
+<li><strong>Scripted keyboard testing.</strong> Tab-key walkthrough via Malimbe's <code>a11y_audit_keyboard</code> tool. Ambiguous automated flags were adjudicated by manual source inspection.</li>
+<li><strong>Manual screen reader testing.</strong> NVDA and JAWS, all three interfaces, performed 2026-10-12 by the owner.</li>
+<li><strong>Manual resize and reflow testing.</strong> Real-browser text resize to 210% and zoom to 400%, performed by the owner. No scripted zoom or reflow check exists in Malimbe's current tooling.</li>
+</ol>
+<p><strong>Assistive technology coverage disclosure.</strong> Screen reader testing used NVDA and JAWS. VoiceOver (desktop, macOS) is <strong>Not Evaluated</strong>: Beyond-A11y does not currently have Apple hardware in its testing toolkit. This is a standing limitation, disclosed in each remark where a Supports claim rests partly on screen reader testing.</p>
+<p><strong>Fix applied during testing.</strong> <code>component-tester.html</code> was missing a <code>&lt;main&gt;</code> landmark and had two sections of content outside any landmark (axe <code>landmark-one-main</code> and <code>region</code>, moderate). The content was wrapped in <code>&lt;main&gt;</code> and the live axe-core audit re-run, confirming 0 violations. After the fix, all three interfaces returned 0 axe-core violations (WCAG 2.2 A/AA).</p>
+<p><strong>Independent tool cross-check.</strong> Pa11y with the HTML_CodeSniffer engine (a different ruleset from axe-core) was run against all three interfaces on 2026-10-13. <code>guided.html</code> and <code>component-tester.html</code>: no issues. <code>index.html</code>: one finding — the options form had no native submit control, so pressing Enter in a text field did nothing. Fixed: the existing "Run the audit" button became a form-associated submit control, routed to the same audit action. Verified by re-running Pa11y (no issues), a functional Enter-key test in both modes, a full axe-core re-scan (0 violations) and a repeat keyboard walk (no new findings).</p>
+<p><strong>Audit mode tested directly.</strong> The expert view's conditionally shown Audit-mode form was opened and scanned with axe-core (WCAG 2.2 A/AA) on 2026-10-13: 0 violations.</p>
+<p><strong>Additional checks (2026-10-13).</strong> Reading order compared with visual position (<code>a11y_audit_reading_order</code>); status-message announcements (<code>a11y_audit_status_messages</code>); rendered-pixel contrast sampling for text over gradient backgrounds; measured border contrast of form controls; WCAG 1.4.12 text-spacing override injected into each live page; rendered size of every interactive control; scripted Tab-through reading live computed focus styles, confirmed by screenshot; and source review for focus, input, pointer, shortcut and language behavior.</p>
+<p><strong>Defects found and fixed before this report.</strong> Each fix was re-verified with a full axe-core re-scan:</p>
+<ul>
+<li>Missing <code>&lt;main&gt;</code> landmark on the component tester (1.3.1)</li>
+<li>No native submit control on the expert view's form (found by Pa11y)</li>
+<li>Two masthead links at 4.44:1 and 4.06:1 contrast (1.4.3; commit <code>eab8103</code>)</li>
+<li>Form-control borders at 1.38:1 contrast (1.4.11)</li>
+<li>Skip link invisible while focused (2.4.7)</li>
+<li>Results and mode changes not announced to screen readers (4.1.3; commit <code>a376e8c</code>)</li>
+<li>Theme-toggle emoji (🌙/☀) read aloud as part of the button's accessible name; now hidden from screen readers on all three interfaces, so the name is exactly "Dark mode" or "Light mode" (commit <code>91944af</code>)</li>
+<li>No skip link on the component tester after its new header controls were added (2.4.1; commit <code>f04f234</code>)</li>
+</ul>
+<p>Every result records the test date and method so any finding can be re-run.</p>
+<h2 id="table-1-success-criteria-level-a">Table 1: Success Criteria, Level A</h2>
+<div class="table-wrap" role="region" tabindex="0" aria-labelledby="table-1-success-criteria-level-a"><table class="crit" aria-labelledby="table-1-success-criteria-level-a">
+<thead>
+<tr>
+<th scope="col">Criteria</th>
+<th scope="col">Conformance Level</th>
+<th scope="col">Remarks and Explanations</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">1.1.1 Non-text Content (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Automated axe-core scan (image-alt and related rules) clean across all three interfaces, including the Audit-mode form state on the expert view. Alt-text <em>quality</em>, not just presence, manually reviewed (2026-10-13): every real <code>&lt;img&gt;</code> across the three interfaces is either the brand favicon with <code>alt=""</code> (correct — adjacent text already names the brand, so it's properly marked decorative) or the dynamic design-system screenshot preview (<code>#ds-image-preview</code>, on both <code>guided.html</code> and <code>index.html</code>), which starts <code>alt=""</code> while empty/hidden and is set to a real, specific, descriptive value (<code>"Preview of uploaded screenshot: " + filename</code>) by JS the moment it actually shows content. No generic or missing alt text found anywhere.</td>
+</tr>
+<tr>
+<th scope="row">1.2.1 Audio-only and Video-only (Prerecorded) (2.0, 2.1, 2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>None of the three interfaces contain any audio or video content.</td>
+</tr>
+<tr>
+<th scope="row">1.2.2 Captions (Prerecorded) (2.0, 2.1, 2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>No prerecorded audio/video content exists anywhere in scope.</td>
+</tr>
+<tr>
+<th scope="row">1.2.3 Audio Description or Media Alternative (Prerecorded) (2.0, 2.1, 2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>No prerecorded video content exists anywhere in scope.</td>
+</tr>
+<tr>
+<th scope="row">1.3.1 Info and Relationships (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Automated axe-core scan (Playwright, real browser) clean on all 3 interfaces. <code>component-tester.html</code> had a missing <code>&lt;main&gt;</code> landmark and unlandmarked content; fixed same day and re-verified clean. Manual NVDA/JAWS pass (2026-10-12), no issues found; re-run 2026-10-13 against the current build (after the skip link, back-link, theme toggle and status-message fixes), clean. <strong>Not Evaluated — VoiceOver</strong> (no Apple hardware currently in this organization's testing toolkit).</td>
+</tr>
+<tr>
+<th scope="row">1.3.2 Meaningful Sequence (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Ran <code>a11y_audit_reading_order</code> (real browser, compares DOM order to visual position) against all three interfaces. <code>guided.html</code> and <code>component-tester.html</code> clean, no mismatches. <code>index.html</code> flagged one jump (last form field to the output panel's heading) — reviewed: this is the same benign multi-column-layout case already established for 2.4.3 (options panel ends, output section heading begins; DOM/reading order is still logically correct, only visual position differs). No defect found.</td>
+</tr>
+<tr>
+<th scope="row">1.3.3 Sensory Characteristics (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Searched all copy for shape/color/position-only references ("the button on the," "click the blue," etc.) — none found.</td>
+</tr>
+<tr>
+<th scope="row">1.4.1 Use of Color (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Every color-coded state found (severity tags, selected/pressed mode buttons) pairs color with an explicit text label or <code>aria-pressed</code>, never color alone.</td>
+</tr>
+<tr>
+<th scope="row">1.4.2 Audio Control (2.0, 2.1, 2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>No audio content anywhere in scope.</td>
+</tr>
+<tr>
+<th scope="row">2.1.1 Keyboard (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Scripted Tab-walk (real browser), current build: <code>guided.html</code> 14/14, <code>index.html</code> 18/19, <code>component-tester.html</code> 7/7. The one unreached item on <code>index.html</code> is a radio input in a native <code>role="radiogroup"</code> that Tab correctly skips per HTML/ARIA spec (arrow keys move within the group) — confirmed false positive, not a defect. Manual NVDA/JAWS pass (2026-10-12), re-run 2026-10-13 against the current build including the new skip link, back-link and theme toggle — clean. <strong>Not Evaluated — VoiceOver</strong> (no Apple hardware currently in this organization's testing toolkit).</td>
+</tr>
+<tr>
+<th scope="row">2.1.2 No Keyboard Trap (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>The scripted Tab-walk had flagged a possible trap on the expert view (at the radiogroup above) and on the component tester (at the "Load fixed sample" button beside the live-render <code>&lt;iframe&gt;</code>, which by default loads a demo sample containing a positive <code>tabindex</code> — intentional demo content, not host-page navigation). Manual NVDA/JAWS pass (2026-10-12) tabbed through both spots directly: no trap, both fully navigable; re-run 2026-10-13 against the current build, still clean. Both automated flags confirmed as tool false positives. <strong>Not Evaluated — VoiceOver</strong> (no Apple hardware currently in this organization's testing toolkit).</td>
+</tr>
+<tr>
+<th scope="row">2.1.4 Character Key Shortcuts (2.1, 2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>No single-character keyboard shortcuts are implemented anywhere (searched for keydown/keypress handlers; none exist).</td>
+</tr>
+<tr>
+<th scope="row">2.2.1 Timing Adjustable (2.0, 2.1, 2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>None of the three interfaces impose a time limit on any task — no session timeouts, no countdowns, no auto-expiring input.</td>
+</tr>
+<tr>
+<th scope="row">2.2.2 Pause, Stop, Hide (2.0, 2.1, 2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>None of the three interfaces contain moving, blinking, scrolling, or auto-updating content. (Status-message live regions announce brief, user-triggered updates, not continuous auto-updating content — out of this SC's scope.)</td>
+</tr>
+<tr>
+<th scope="row">2.3.1 Three Flashes or Below Threshold (2.0, 2.1, 2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>No flashing or strobing content exists anywhere in scope; <code>prefers-reduced-motion</code> is respected where any transition exists at all.</td>
+</tr>
+<tr>
+<th scope="row">2.4.1 Bypass Blocks (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>All three interfaces have a working "Skip to main content" link. The component tester's theme toggle and back-link sit in its header before <code>&lt;main&gt;</code>, so a skip link was added there on 2026-10-13 using the same pattern as the other two pages. Verified with a full tab-order trace (skip link → back-link → theme toggle → first textarea, each with a visible focus outline, confirmed by screenshot) and the owner's NVDA/JAWS re-check (2026-10-13) on all three pages — clean. <strong>Not Evaluated — VoiceOver</strong> (no Apple hardware currently in this organization's testing toolkit).</td>
+</tr>
+<tr>
+<th scope="row">2.4.2 Page Titled (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Automated axe-core <code>document-title</code> check clean; each of the three interfaces has a descriptive, distinct <code>&lt;title&gt;</code>.</td>
+</tr>
+<tr>
+<th scope="row">2.4.3 Focus Order (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Several heuristic "focus order vs. visual layout" flags across all three interfaces. Each one checked by hand against the markup lines up with either an intentional skip link ("Skip to main content") or a multi-column layout where an output/preview panel sits visually beside the input form — both are the tool's own documented benign case (DOM/reading order still correct; only visual position differs). No defect found.</td>
+</tr>
+<tr>
+<th scope="row">2.4.4 Link Purpose (In Context) (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Automated axe-core confirms every link has an accessible name (none empty/unnamed). Link text manually reviewed against the current build (2026-10-13): 8 static links — <code>index.html</code>: "Skip to main content," "Not sure where to start? Use guided mode →," "Review this component." <code>guided.html</code>: "Skip to main content," "Open the expert view," "Review this component" (with a descriptive subtitle), "the expert view" (footer). <code>component-tester.html</code>: "Skip to main content," plus a conditional link, "← Back to the guided door" / "← Back to the expert view," shown only when launched from one of the other two. All descriptive out of context, none generic ("click here"/"read more").</td>
+</tr>
+<tr>
+<th scope="row">2.5.1 Pointer Gestures (2.1, 2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>No multipoint or path-based gesture input anywhere (searched for drag/touch/pointer handlers; none exist).</td>
+</tr>
+<tr>
+<th scope="row">2.5.2 Pointer Cancellation (2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>No <code>mousedown</code>-triggered actions found anywhere — every action fires on <code>click</code> (the up-event), which is cancelable by default.</td>
+</tr>
+<tr>
+<th scope="row">2.5.3 Label in Name (2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Searched every <code>aria-label</code> usage on all three pages (5 total): none override a differing visible text label on an operable control — they're on a <code>&lt;form&gt;</code>, a <code>role="radiogroup"</code> container, and two <code>&lt;pre&gt;</code> output regions, none of which have a separate visible "label text" a voice-control user would speak to activate them.</td>
+</tr>
+<tr>
+<th scope="row">2.5.4 Motion Actuation (2.1, 2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>None of the three interfaces use device motion (shake, tilt) as an input mechanism.</td>
+</tr>
+<tr>
+<th scope="row">3.1.1 Language of Page (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Automated axe-core <code>html-has-lang</code>/<code>html-lang-valid</code> checks clean; all three interfaces declare <code>&lt;html lang="en"&gt;</code>.</td>
+</tr>
+<tr>
+<th scope="row">3.2.1 On Focus (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>No <code>onfocus</code> handler anywhere triggers navigation or an unexpected context change (confirmed by reading the source — focus-related logic only updates visual/ARIA state).</td>
+</tr>
+<tr>
+<th scope="row">3.2.2 On Input (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>The global <code>input</code>/<code>change</code> listeners only call <code>render()</code>, which updates on-page content; nothing auto-submits or auto-navigates on a field change.</td>
+</tr>
+<tr>
+<th scope="row">3.2.6 Consistent Help (2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>No help, contact, or support mechanism (link, chat, phone, email) exists anywhere within these three interfaces' scope.</td>
+</tr>
+<tr>
+<th scope="row">3.3.1 Error Identification (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>The one error condition in scope (submitting Audit mode with an empty URL) is identified in text via the live-region status message ("Enter a URL first") and focus is moved to the field in error.</td>
+</tr>
+<tr>
+<th scope="row">3.3.2 Labels or Instructions (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Every input-requiring field has a visible label or instructional text — covered across the 1.1.1, 2.4.4 and 2.4.6 checks.</td>
+</tr>
+<tr>
+<th scope="row">3.3.7 Redundant Entry (2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>No multi-step process anywhere asks the user to re-enter information they already provided in the same process.</td>
+</tr>
+<tr>
+<th scope="row">4.1.1 Parsing (2.0, 2.1)</th>
+<td><span class="lvl ok">Supports (WCAG 2.0 and 2.1)</span></td>
+<td>For WCAG 2.0 and 2.1, per W3C errata, this criterion is always satisfied for HTML and XML. Removed in WCAG 2.2.</td>
+</tr>
+<tr>
+<th scope="row">4.1.2 Name, Role, Value (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Automated axe-core pass clean, plus manual NVDA and JAWS pass (2026-10-12) across all three interfaces found no issues with name/role/value exposure to either screen reader; re-run 2026-10-13 against the current build, still clean. <strong>Not Evaluated — VoiceOver</strong> (no Apple hardware currently in this organization's testing toolkit).</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="table-2-success-criteria-level-aa">Table 2: Success Criteria, Level AA</h2>
+<div class="table-wrap" role="region" tabindex="0" aria-labelledby="table-2-success-criteria-level-aa"><table class="crit" aria-labelledby="table-2-success-criteria-level-aa">
+<thead>
+<tr>
+<th scope="col">Criteria</th>
+<th scope="col">Conformance Level</th>
+<th scope="col">Remarks and Explanations</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">1.2.4 Captions (Live) (2.0, 2.1, 2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>No live audio/video content exists anywhere in scope.</td>
+</tr>
+<tr>
+<th scope="row">1.2.5 Audio Description (Prerecorded) (2.0, 2.1, 2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>No prerecorded video content exists anywhere in scope.</td>
+</tr>
+<tr>
+<th scope="row">1.3.4 Orientation (2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>No orientation-locking CSS anywhere (<code>@media (orientation:...)</code> absent).</td>
+</tr>
+<tr>
+<th scope="row">1.3.5 Identify Input Purpose (2.1, 2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>No field on any of the three interfaces collects personal/user-identity information matching the SC's defined autocomplete taxonomy (name, email, address, etc.) — every text field collects project/tool configuration (a URL to audit, a design-system reference), not user data.</td>
+</tr>
+<tr>
+<th scope="row">1.4.3 Contrast (Minimum) (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Automated axe-core contrast checks clean on all three interfaces. Text over the gradient page background, which axe-core cannot evaluate, was checked by rendered-pixel sampling (2026-10-13): two masthead links on <code>guided.html</code> and <code>index.html</code> measured 4.44:1 and 4.06:1, below the 4.5:1 minimum. Fixed with a darker light-mode color for those two links (commit <code>eab8103</code>); both now measure 5.36–5.85:1. Dark mode already measured 7.0–7.7:1 and was unchanged. Re-verified with axe-core and Pa11y/HTML_CodeSniffer, both clean.</td>
+</tr>
+<tr>
+<th scope="row">1.4.4 Resize Text (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Manual testing (2026-10-13, owner), real browser text resize to 210% (above the 200% SC threshold), across all three interfaces: presented without horizontal scroll and without loss of content or functionality.</td>
+</tr>
+<tr>
+<th scope="row">1.4.5 Images of Text (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>No image contains text used in place of real text — the only images are the brand favicon (decorative) and a user-uploaded screenshot preview (real image content, not a text substitute).</td>
+</tr>
+<tr>
+<th scope="row">1.4.10 Reflow (2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Tested with real browser zoom to both 210% (above the 1.4.4 threshold) and 400% across all three browser-based interfaces. Content reflows to a single column with no loss of functionality and no two-dimensional scrolling.</td>
+</tr>
+<tr>
+<th scope="row">1.4.11 Non-text Contrast (2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td><strong>Real defect found and fixed (2026-10-13).</strong> Every plain-bordered text input, <code>&lt;select&gt;</code> and <code>&lt;textarea&gt;</code> on all three interfaces used a light-mode border color (<code>#D6DCE4</code>) measuring 1.38:1 against white, under the 3:1 minimum for UI component boundaries. Fixed by darkening the light-mode border to <code>#7C8798</code> (3.64:1 against white). Dark mode's border already measured 3.12:1 and was unchanged. Verified by re-measured contrast, a full axe-core re-scan (clean on all three interfaces) and a visual check for regressions.</td>
+</tr>
+<tr>
+<th scope="row">1.4.12 Text Spacing (2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Injected the standard WCAG 1.4.12 override CSS (line-height 1.5, letter-spacing 0.12em, word-spacing 0.16em, paragraph spacing 2em) into all three live pages and visually inspected full-page screenshots: no clipped, truncated, or overlapping content anywhere; no horizontal overflow (measured).</td>
+</tr>
+<tr>
+<th scope="row">1.4.13 Content on Hover or Focus (2.1, 2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>No custom hover/focus-triggered content (tooltips, popovers) exists on any of the three interfaces — searched for <code>:hover</code> display/visibility rules and <code>title=</code> attributes beyond one native iframe title; found none that create dismissible/hoverable content.</td>
+</tr>
+<tr>
+<th scope="row">2.4.5 Multiple Ways (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>All three interfaces are now mutually reachable by real, verified links, not just reasoned around for a small toolset: <code>guided.html</code> and <code>index.html</code> already cross-linked to each other; both now also link to <code>component-tester.html</code> ("Review this component"), which links back to whichever of the two launched it. No page is a dead end or orphaned endpoint.</td>
+</tr>
+<tr>
+<th scope="row">2.4.6 Headings and Labels (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Clean heading-order/empty-heading results on every axe-core scan this round; every form field's label text reviewed and found descriptive (part of the 2.4.4, 1.1.1 and 3.3.2 checks).</td>
+</tr>
+<tr>
+<th scope="row">2.4.7 Focus Visible (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Not reliably automatable by axe-core's standard ruleset (known gap — see AUDIT-COVERAGE.md). Verified by an actual visual Tab-through (2026-10-13): scripted real Tab presses across all three interfaces and read the live computed style (outline/box-shadow) at each focus stop. Every control type reached (links, buttons, radio, select, textarea) renders a visible 3px solid amber outline (<code>#F59E0B</code>) when focused. <code>index.html</code>'s explicit CSS rule doesn't list <code>textarea</code> specifically, but nothing removes its native browser focus outline either, so it still gets a visible (if unstyled) indicator — a minor visual-consistency gap, not an accessibility defect. <strong>Defect found and fixed (2026-10-13):</strong> the "Skip to main content" link on <code>guided.html</code> and <code>index.html</code> stayed clipped to 1×1 px even while focused, so the first Tab stop showed no visible focus. Fixed with a <code>.sr-only:focus</code> rule that shows the link, with its focus ring, only while focused. Verified by screenshot, a full axe-core re-scan (clean) and a keyboard walk (13/13 reachable, no new findings).</td>
+</tr>
+<tr>
+<th scope="row">2.4.11 Focus Not Obscured (Minimum) (2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>No <code>position: sticky</code> or <code>position: fixed</code> elements anywhere on any of the three pages — nothing can float over a focused control.</td>
+</tr>
+<tr>
+<th scope="row">2.5.7 Dragging Movements (2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>No drag-and-drop interaction anywhere in scope.</td>
+</tr>
+<tr>
+<th scope="row">2.5.8 Target Size (Minimum) (2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Measured every interactive control's real rendered size on all three pages. A few are genuinely under 24×24 (two inline text links, a few native checkboxes) — each qualifies for one of the SC's own explicit exceptions: inline text links are exempt outright; every undersized checkbox is wrapped in a <code>&lt;label&gt;</code> with substantial visible text, which is a same-function target ≥24×24 px (the "equivalent" exception), confirmed by reading the actual markup, not assumed.</td>
+</tr>
+<tr>
+<th scope="row">3.1.2 Language of Parts (2.0, 2.1, 2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>No passage anywhere is in a language other than the page's own declared <code>lang="en"</code> — searched for any <code>lang=</code> attribute beyond the root <code>&lt;html&gt;</code>; found none, meaning there's no language shift to mark in the first place.</td>
+</tr>
+<tr>
+<th scope="row">3.2.3 Consistent Navigation (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>All three pages share the masthead structure and relative order (logo/brand, context-dependent link, heading, intro, theme toggle). The component tester's back-link is a deliberate, contextual difference, not an inconsistency: <code>guided.html</code> and <code>index.html</code> are the two hub tools that always cross-link to each other and out to the component tester; the component tester needs a way back to whichever hub launched it. Same navigational role (a way to the other relevant tool), with content suited to each page's position in the flow.</td>
+</tr>
+<tr>
+<th scope="row">3.2.4 Consistent Identification (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>All three pages offer dark mode through the identical theme-toggle button: same icon, same "Dark mode"/"Light mode" label, same <code>aria-pressed</code> pattern, and a shared <code>malimbeba-ui-theme</code> storage key so the choice stays in sync across all three. Verified with an axe-core scan of the dark-mode rendered state as well as the light-mode default.</td>
+</tr>
+<tr>
+<th scope="row">3.3.3 Error Suggestion (2.0, 2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>The same "Enter a URL first" message doubles as the correction suggestion — it states exactly what to do.</td>
+</tr>
+<tr>
+<th scope="row">3.3.4 Error Prevention (Legal, Financial, Data) (2.0, 2.1, 2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>None of the three interfaces perform legal commitments, financial transactions, or deletion of user-controlled data.</td>
+</tr>
+<tr>
+<th scope="row">3.3.8 Accessible Authentication (Minimum) (2.2)</th>
+<td><span class="lvl na">Not Applicable</span></td>
+<td>No authentication mechanism exists anywhere in these three interfaces.</td>
+</tr>
+<tr>
+<th scope="row">4.1.3 Status Messages (2.1, 2.2)</th>
+<td><span class="lvl ok">Supports</span></td>
+<td>Status-message check (<code>a11y_audit_status_messages</code>, 2026-10-13) found that results and mode changes were not announced. Fixed (commit <code>a376e8c</code>): the component tester's status region now announces the audit outcome ("No violations found." or "Blocked — N issues: X critical, Y serious, Z moderate.") and any errors; <code>guided.html</code> and <code>index.html</code> announce mode switches (Build/Check, Generate/Audit). The prompt and report panels, which regenerate on every keystroke, are deliberately not live regions, so screen readers are not flooded with the full text on each change. Announcement text verified on all three interfaces; axe-core re-scan clean. Confirmed with assistive technology: the owner's NVDA/JAWS re-check (2026-10-13, through commit <code>f04f234</code>) covered these announcements and came back clean. <strong>Not Evaluated — VoiceOver</strong> (no Apple hardware currently in this organization's testing toolkit).</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="table-3-success-criteria-level-aaa">Table 3: Success Criteria, Level AAA</h2>
+<p>Not evaluated.</p>
+<section class="legal" aria-labelledby="legal-disclaimer-beyond-a11y-llc"><h2 id="legal-disclaimer-beyond-a11y-llc">Legal Disclaimer (Beyond-A11y, LLC)</h2>
+<p>This report reflects the accessibility of Malimbe by Beyond A11y solely for the specific software commits, testing dates, and environments identified herein. Findings are limited to the scope and conditions of testing and do not constitute a representation, guarantee, or warranty, express or implied, of accessibility, regulatory compliance, or freedom from defects. Accessibility may vary based on subsequent product modifications, third-party integrations, host applications, configurations, and user environments, for which Beyond-A11y, LLC assumes no responsibility. Beyond-A11y, LLC reserves the right to revise this report at its discretion and undertakes no obligation to update or maintain its accuracy following publication.</p></section>
+</main>
+<footer><p style="margin:0">Beyond-A11y, LLC · info@beyond-a11y.com · 833-239-6632 · beyond-a11y.com</p><p style="margin:0">VPAT® is a registered service mark of the Information Technology Industry Council (ITI).</p></footer>
+</div>
+</body>
+</html>
