@@ -10,7 +10,7 @@ Malimbe is honest about limits: automated checks are necessary but not sufficien
 
 ## Get Malimbe
 - Free 30-day trial and plans: https://www.beyond-a11y.com/product-page/malimbe-by-beyond-a11y
-- Latest release: https://github.com/beyond-a11y/malimbeba-releases/releases/latest
+- Latest release (v0.4.4): https://github.com/beyond-a11y/malimbeba-releases/releases/tag/v0.4.4
 - Accessibility Conformance Report (VPAT 2.5): https://beyond-a11y.github.io/malimbeba-releases/acr/
 
 ## Install
