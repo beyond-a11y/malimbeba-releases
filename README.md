@@ -1,6 +1,6 @@
 # Malimbe by Beyond A11y
 
-Malimbe by Beyond A11y is an AI accessibility tool for coding agents. It runs as an MCP server with accessibility skills and a prompt builder inside Claude Code, VS Code, Codex, Cursor, and any editor that speaks `mcp.json`. Your agent builds accessible components and audits sites, repos and unhosted code against WCAG 2.2 Level A and AA.
+Malimbe by Beyond A11y is an AI accessibility tool for coding agents. It runs as an MCP server with accessibility skills and a prompt builder inside Claude Code, VS Code, Codex, Cursor, GitHub Copilot, and any editor that speaks `mcp.json`. Your agent builds accessible components and audits sites, repos and unhosted code against WCAG 2.2 Level A and AA.
 
 - **Build:** generates components with the full keyboard, focus and ARIA contract for the pattern you describe.
 - **Audit:** axe-core audits of live URLs, same-origin crawls and unhosted code served on a private local page, plus checks (keyboard flow, screen-reader announcements, reading order, status messages) that static analysis misses.
