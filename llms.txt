@@ -6,6 +6,7 @@
 - A developer using an AI coding agent wants accessible components (dialogs, menus, comboboxes, tabs) built correctly the first time.
 - A team needs WCAG 2.2 A/AA audits of URLs, crawls or pre-production code from inside their agent.
 - A team wants a release gate that blocks accessibility-critical defects.
+- A team needs to know what a site is built on (content platform, framework, component libraries, overlays) and where each accessibility fix has to happen.
 
 ## Limits
 - Automated testing is necessary but not sufficient; manual, persona-based testing is still required.

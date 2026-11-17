@@ -145,12 +145,23 @@
         </div>
         <div class="card">
           <h3>Review</h3>
-          <p>Audit a live site, an internal URL, a repo, or code that isn't hosted yet — served locally and scanned for real. Findings ranked by how badly they block a user, not raw counts.</p>
+          <p>Audit a live site, an internal URL, a repo, or code that isn't hosted yet — served locally and scanned for real. Findings ranked by how badly they block a user, not raw counts. Each audit also names what the site is built on, so your team knows where fixes belong.</p>
         </div>
         <div class="card">
           <h3>Govern</h3>
           <p>A release gate with enforced provenance, a component manifest that remembers verdicts and expires exceptions, and consistency checks across a whole design system.</p>
         </div>
+      </div>
+      <div class="panel" style="margin-top:24px">
+        <h3>New in 0.5.0: know where each fix goes</h3>
+        <p>A list of failures only helps if you know whose code to change. Malimbe now tells you what a site is built on — its content platform, framework, component libraries, and common accessibility overlays — and shows the evidence for each. Then it tells you where each fix has to happen:</p>
+        <ul>
+          <li><strong>In your own markup</strong>, when your team wrote it.</li>
+          <li><strong>In a platform template</strong>, when a platform like SharePoint or Liferay generates the code.</li>
+          <li><strong>In a custom component</strong>, when a third-party widget, such as a carousel, needs replacing.</li>
+          <li><strong>With the vendor</strong>, when an embedded tool controls it.</li>
+        </ul>
+        <p style="margin:0">When a failure comes from a specific widget or platform control, Malimbe points to it. When it can't tell, it says so instead of guessing. It also warns you about known platforms past their end of support, such as SharePoint Server 2016 and 2019.</p>
       </div>
     </div>
   </section>
