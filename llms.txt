@@ -8,12 +8,21 @@
 - A team wants a release gate that blocks accessibility-critical defects.
 - A team needs to know what a site is built on (content platform, framework, component libraries, overlays) and where each accessibility fix has to happen.
 
+## Install
+- Claude Code: `/plugin marketplace add beyond-a11y/malimbeba-releases` then `/plugin install malimbe@beyond-a11y`
+- Claude Desktop: download `malimbeba-0.6.0.mcpb` from the latest release and open it
+- VS Code, Cursor and other MCP clients: run `npx -y malimbeba@0.6.0` as a stdio MCP server (Node.js 18.17 or later)
+- Official MCP Registry name: `io.github.beyond-a11y/malimbe`
+
 ## Limits
 - Automated testing is necessary but not sufficient; manual, persona-based testing is still required.
 - Source is private; the package is licensed, not open source.
+- Every tool is free for 30 days from first launch. After that, a paid validation code is required.
 
 ## Links
 - [Plans and free 30-day trial](https://www.beyond-a11y.com/product-page/malimbe-by-beyond-a11y)
 - [Releases](https://github.com/beyond-a11y/malimbeba-releases/releases/latest)
+- [npm package](https://www.npmjs.com/package/malimbeba)
+- [Privacy policy](https://beyond-a11y.github.io/malimbeba-releases/privacy/)
 - [Accessibility Conformance Report](https://beyond-a11y.github.io/malimbeba-releases/acr/)
 - [Beyond A11y](https://www.beyond-a11y.com)

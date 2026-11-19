@@ -13,7 +13,7 @@
  "name":"Malimbe by Beyond A11y","alternateName":["Malimbe","Malimbe AI"],
  "description":"Malimbe is an AI accessibility tool for coding agents. It works inside Claude Code, VS Code, Codex, Cursor, GitHub Copilot, and any editor that speaks mcp.json, to build and audit WCAG 2.2 accessible components.",
  "applicationCategory":"DeveloperApplication","operatingSystem":"Windows, macOS, Linux",
- "softwareVersion":"0.5.0",
+ "softwareVersion":"0.6.0",
  "url":"https://www.beyond-a11y.com/product-page/malimbe-by-beyond-a11y",
  "sameAs":["https://github.com/beyond-a11y/malimbeba-releases","https://beyond-a11y.github.io/malimbeba-releases/"],
  "publisher":{"@type":"Organization","name":"Beyond-A11y, LLC","url":"https://www.beyond-a11y.com/"},
@@ -124,7 +124,7 @@
       <p class="eyebrow">Accessibility, right on time</p>
       <h1 id="h1">Ship accessible UI at the speed of AI coding.</h1>
       <p class="lede">Malimbe plugs into your agentic coding tool to help it <strong>build</strong> accessible components, <strong>review</strong> your work before it's hosted, and <strong>govern</strong> a design system — measured against WCAG 2.2 Level A and AA.</p>
-      <a class="cta" href="https://www.beyond-a11y.com/product-page/malimbe-by-beyond-a11y">Start the 30-day evaluation</a>
+      <a class="cta" href="#fit">Start the 30-day evaluation</a>
       <a class="cta secondary" href="#what">See what it does</a>
     </div>
   </section>
@@ -163,6 +163,10 @@
         </ul>
         <p style="margin:0">When a failure comes from a specific widget or platform control, Malimbe points to it. When it can't tell, it says so instead of guessing. It also warns you about known platforms past their end of support, such as SharePoint Server 2016 and 2019.</p>
       </div>
+      <div class="panel" style="margin-top:24px">
+        <h3>New in 0.6.0: install from the directories you already use</h3>
+        <p style="margin:0">Malimbe now installs from npm, as a Claude Code plugin, and as a Claude Desktop bundle. The 30-day trial starts the first time it runs. After the trial, Malimbe needs a paid validation code to run. The Skills now come from the Malimbe server itself, so your agent always reads the version that matches your install.</p>
+      </div>
     </div>
   </section>
 
@@ -174,18 +178,20 @@
           <h2 id="fit-h">One line in your editor config.</h2>
           <p class="section-intro">Malimbe is model- and platform-agnostic. The same package serves every agentic surface through the standard MCP protocol — no lock-in to one assistant.</p>
           <ul class="checks">
-            <li>Ships pre-built — install the package, no compiling on your end</li>
+            <li>Ships pre-built. Install from npm, as a Claude Code plugin, or as a Claude Desktop bundle</li>
             <li>Finds your installed Chrome or Edge automatically; no forced downloads, no mysterious hangs</li>
             <li><code>malimbeba doctor</code> hands you your exact, ready-to-paste editor config — no path-guessing</li>
             <li>Static checks always work, even with no browser present</li>
           </ul>
         </div>
-        <div class="panel" aria-label="Example configuration">
-          <h3 style="font-size:16px">Install, then let doctor configure your editor</h3>
-          <p style="font-size:14px;color:var(--muted);margin:0 0 12px">Download <a href="https://github.com/beyond-a11y/malimbeba-releases/releases/tag/v0.5.0">malimbeba-0.5.0.tgz from the 0.5.0 beta release</a>, then run:</p>
-          <pre><code>npm install -g ./malimbeba-0.5.0.tgz
-malimbeba doctor</code></pre>
-          <p style="font-size:14px;color:var(--muted);margin:12px 0 0">Prints your MCP config with the correct path already filled in for your install — copy it as-is into your editor.</p>
+        <div class="panel">
+          <h3 style="font-size:16px">Install where you already work</h3>
+          <ul style="font-size:14px;margin:0;padding-left:20px">
+            <li><strong>Claude Code:</strong> <code>/plugin marketplace add beyond-a11y/malimbeba-releases</code>, then <code>/plugin install malimbe@beyond-a11y</code></li>
+            <li><strong>Claude Desktop:</strong> download <code>malimbeba-0.6.0.mcpb</code> from <a href="https://github.com/beyond-a11y/malimbeba-releases/releases/tag/v0.6.0">the 0.6.0 beta release</a> and double-click it</li>
+            <li><strong>VS Code, Cursor and other MCP clients:</strong> run <code>npx -y malimbeba@0.6.0</code> as a stdio MCP server. It needs Node.js 18.17 or later</li>
+            <li><strong>Prefer a global install?</strong> <code>npm install -g malimbeba</code>, then <code>malimbeba doctor</code> prints your MCP config with the correct path already filled in</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -207,10 +213,10 @@ malimbeba doctor</code></pre>
   <section id="access" aria-labelledby="access-h" style="background:var(--surface)">
     <div class="wrap">
       <div class="access">
-        <span class="badge">Early access · v0.5.0 beta</span>
+        <span class="badge">Early access · v0.6.0 beta</span>
         <h2 id="access-h">Bring accessibility into your agentic workflow.</h2>
-        <p class="section-intro" style="margin:0 auto 28px">Start a free 30-day evaluation — a $0 checkout gets you a receipt and an activation code by email, plus the install instructions. Install the package, run one command, and you have a ready-to-paste MCP configuration. Activate your code before the 30 days end to keep going without interruption.</p>
-        <a class="cta" href="https://www.beyond-a11y.com/product-page/malimbe-by-beyond-a11y">Start the 30-day evaluation</a>
+        <p class="section-intro" style="margin:0 auto 28px">Start a free 30-day evaluation. Install from npm, GitHub or your editor's directory, with no account and no card. The 30 days start the first time Malimbe runs. To keep going after that, <a href="https://www.beyond-a11y.com/product-page/malimbe-by-beyond-a11y">buy a validation code</a> and activate it before the 30 days end.</p>
+        <a class="cta" href="#fit">Start the 30-day evaluation</a>
         <a class="cta secondary" href="mailto:info@beyond-a11y.com?subject=Malimbe%20license">Ask about a license</a>
         <p style="font-size:14px;color:var(--muted);margin:18px 0 0">No coding agent? Run <code>malimbeba-ui</code> after installing for a browser-only interface — no AI agent or MCP client required.</p>
       </div>
