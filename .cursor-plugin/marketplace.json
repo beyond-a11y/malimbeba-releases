@@ -1,0 +1,17 @@
+{
+  "name": "beyond-a11y",
+  "owner": {
+    "name": "Beyond-A11y, LLC",
+    "email": "info@beyond-a11y.com"
+  },
+  "metadata": {
+    "description": "Malimbe by Beyond A11y: accessibility tools for coding agents."
+  },
+  "plugins": [
+    {
+      "name": "malimbe",
+      "source": "plugins/malimbe",
+      "description": "Accessibility for coding agents: WCAG 2.2 A/AA audits, accessible component guidance, release gates."
+    }
+  ]
+}
