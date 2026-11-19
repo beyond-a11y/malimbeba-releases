@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "malimbe": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "malimbeba@0.6.0"
+      ]
+    }
+  }
+}

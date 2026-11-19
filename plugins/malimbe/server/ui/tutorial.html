@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Malimbe quick-start tutorial</title>
+  <style>
+    :root {
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      color: #202a24;
+      background: #eef2ed;
+      line-height: 1.65;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: clamp(1rem, 4vw, 3rem); }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(12rem, 16rem) minmax(0, 52rem);
+      gap: clamp(1.5rem, 4vw, 3.5rem);
+      max-width: 74rem;
+      margin: 0 auto;
+      align-items: start;
+    }
+
+    nav {
+      position: sticky;
+      top: 1.5rem;
+      padding: 1.25rem;
+      border: 1px solid #d8e0d8;
+      border-radius: 0.75rem;
+      background: #fff;
+    }
+
+    nav strong { display: block; margin-block-end: 0.6rem; }
+    nav a { display: block; padding: 0.25rem 0; color: #245c3b; }
+    main {
+      min-width: 0;
+      padding: clamp(1.5rem, 5vw, 3.5rem);
+      border: 1px solid #d8e0d8;
+      border-radius: 1rem;
+      background: #fff;
+      box-shadow: 0 1.5rem 4rem #1d352014;
+    }
+
+    h1, h2, h3 { color: #17231e; line-height: 1.2; }
+    h1 { margin-block: 0 1rem; font-size: clamp(2.1rem, 5vw, 3.2rem); letter-spacing: -0.04em; }
+    h2 { margin-block-start: 2.5rem; padding-block-start: 0.5rem; font-size: 1.65rem; }
+    h3 { margin-block-start: 1.8rem; font-size: 1.2rem; }
+    p, li { max-width: 72ch; }
+    a { color: #245c3b; text-underline-offset: 0.2em; }
+    code {
+      padding: 0.12em 0.32em;
+      border-radius: 0.25rem;
+      background: #eef2ed;
+      font-size: 0.92em;
+    }
+
+    pre {
+      overflow-x: auto;
+      padding: 1.1rem 1.25rem;
+      border: 1px solid #304438;
+      border-radius: 0.6rem;
+      background: #17231e;
+      color: #f3f7f2;
+      line-height: 1.55;
+      tab-size: 2;
+    }
+
+    pre code { padding: 0; background: none; color: inherit; }
+    blockquote {
+      margin-inline: 0;
+      padding: 0.2rem 1rem;
+      border-inline-start: 4px solid #74a181;
+      color: #46574b;
+      background: #f4f8f3;
+    }
+
+    .eyebrow {
+      margin-block: 0 0.4rem;
+      color: #426a53;
+      font-size: 0.8rem;
+      font-weight: 750;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    #load-error { color: #8b1e1e; }
+    :focus-visible { outline: 3px solid #9a5b13; outline-offset: 3px; }
+
+    @media (max-width: 48rem) {
+      body { padding: 0.75rem; }
+      .layout { grid-template-columns: 1fr; gap: 0.75rem; }
+      nav { position: static; }
+      main { padding: 1.25rem; }
+    }
+
+    @media (forced-colors: active) {
+      nav, main, pre { border: 1px solid CanvasText; }
+      a { color: LinkText; }
+      :focus-visible { outline-color: Highlight; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav aria-label="Tutorial sections">
+      <strong>In this tutorial</strong>
+      <a href="#choose-how-you-want-to-use-malimbe">Choose a setup</a>
+      <a href="#build-and-inspect-a-component">Build a component</a>
+      <a href="#request-and-understand-an-accessibility-report">Read an audit</a>
+      <a href="#next-steps">Next steps</a>
+    </nav>
+    <main>
+      <p class="eyebrow">Getting started</p>
+      <div id="tutorial-content" aria-busy="true">Loading the tutorial…</div>
+      <p id="load-error" role="alert" hidden></p>
+    </main>
+  </div>
+  <script type="module">
+    const container = document.querySelector("#tutorial-content");
+    const errorMessage = document.querySelector("#load-error");
+    const inlinePattern = /(\[[^\]]+\]\([^)]+\)|`[^`]+`|\*\*[^*]+\*\*)/g;
+
+    function appendInline(parent, text) {
+      let position = 0;
+      for (const match of text.matchAll(inlinePattern)) {
+        parent.append(document.createTextNode(text.slice(position, match.index)));
+        const token = match[0];
+        if (token.startsWith("[")) {
+          const parsed = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(token);
+          if (parsed) {
+            const link = document.createElement("a");
+              appendInline(link, parsed[1]);
+              const localDocs = {
+                "components/carousel.js": "/components/carousel.js",
+                "components/README.md": "/docs/components/README.md",
+                "ui/carousel-demo.html": "/carousel-demo.html",
+                "WORKFLOWS.md": "/docs/WORKFLOWS.md",
+                "README.md": "/docs/README.md",
+                "AGENTS.md": "/docs/AGENTS.md",
+              };
+              link.href = localDocs[parsed[2]] || parsed[2];
+            parent.append(link);
+          }
+        } else if (token.startsWith("`")) {
+          const code = document.createElement("code");
+          code.textContent = token.slice(1, -1);
+          parent.append(code);
+        } else {
+          const strong = document.createElement("strong");
+          strong.textContent = token.slice(2, -2);
+          parent.append(strong);
+        }
+        position = match.index + token.length;
+      }
+      parent.append(document.createTextNode(text.slice(position)));
+    }
+
+    function renderMarkdown(markdown) {
+      const lines = markdown.replace(/\r\n/g, "\n").split("\n");
+      const fragment = document.createDocumentFragment();
+      let index = 0;
+
+      while (index < lines.length) {
+        const line = lines[index];
+        if (!line.trim()) { index++; continue; }
+
+        if (/^\s*```/.test(line)) {
+          index++;
+          const codeLines = [];
+          while (index < lines.length && !/^\s*```/.test(lines[index])) codeLines.push(lines[index++]);
+          index++;
+          const pre = document.createElement("pre");
+          const code = document.createElement("code");
+          code.textContent = codeLines.map((part) => part.replace(/^ {2,}/, "")).join("\n");
+          pre.append(code);
+          fragment.append(pre);
+          continue;
+        }
+
+        const heading = /^(#{1,3})\s+(.+)$/.exec(line);
+        if (heading) {
+          const element = document.createElement(`h${heading[1].length}`);
+          element.id = heading[2].toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+          appendInline(element, heading[2]);
+          fragment.append(element);
+          index++;
+          continue;
+        }
+
+        if (/^\s*>\s?/.test(line)) {
+          const quote = document.createElement("blockquote");
+          while (index < lines.length && /^\s*>\s?/.test(lines[index])) {
+            const paragraph = document.createElement("p");
+            appendInline(paragraph, lines[index++].replace(/^\s*>\s?/, ""));
+            quote.append(paragraph);
+          }
+          fragment.append(quote);
+          continue;
+        }
+
+        const listMatch = /^\s*(\d+\.|-)\s+(.+)$/.exec(line);
+        if (listMatch) {
+          const ordered = listMatch[2] && /^\s*\d+\./.test(line);
+          const list = document.createElement(ordered ? "ol" : "ul");
+          if (ordered) list.start = Number(listMatch[1]);
+          while (index < lines.length) {
+            const itemMatch = /^\s*(\d+\.|-)\s+(.+)$/.exec(lines[index]);
+            if (!itemMatch || (ordered !== /^\s*\d+\./.test(lines[index]))) break;
+            const item = document.createElement("li");
+            appendInline(item, itemMatch[2]);
+            list.append(item);
+            index++;
+          }
+          fragment.append(list);
+          continue;
+        }
+
+        const paragraphLines = [];
+        while (
+          index < lines.length
+          && lines[index].trim()
+          && !/^\s*```/.test(lines[index])
+          && !/^#{1,3}\s+/.test(lines[index])
+          && !/^\s*>/.test(lines[index])
+          && !/^\s*(\d+\.|-)\s+/.test(lines[index])
+        ) paragraphLines.push(lines[index++].trim());
+        const paragraph = document.createElement("p");
+        appendInline(paragraph, paragraphLines.join(" "));
+        fragment.append(paragraph);
+      }
+      return fragment;
+    }
+
+    try {
+      const response = await fetch("/tutorial.md");
+      if (!response.ok) throw new Error(`Tutorial request failed (${response.status}).`);
+      container.replaceChildren(renderMarkdown(await response.text()));
+      container.setAttribute("aria-busy", "false");
+    } catch (error) {
+      container.hidden = true;
+      errorMessage.textContent = error instanceof Error ? error.message : "Could not load the tutorial.";
+      errorMessage.hidden = false;
+    }
+  </script>
+</body>
+</html>

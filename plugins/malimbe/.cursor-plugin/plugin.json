@@ -1,0 +1,26 @@
+{
+  "name": "malimbe",
+  "displayName": "Malimbe by Beyond A11y",
+  "version": "0.6.0",
+  "description": "Accessibility for coding agents: WCAG 2.2 A/AA audits, accessible component guidance, release gates.",
+  "author": {
+    "name": "Beyond-A11y, LLC",
+    "email": "info@beyond-a11y.com"
+  },
+  "homepage": "https://beyond-a11y.com",
+  "repository": "https://github.com/beyond-a11y/malimbeba-releases",
+  "license": "LicenseRef-Malimbe-Proprietary",
+  "logo": "assets/logo.png",
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "wcag",
+    "wcag22",
+    "axe-core",
+    "aria",
+    "section-508",
+    "ada"
+  ],
+  "category": "developer-tools",
+  "mcpServers": "./mcp.json"
+}

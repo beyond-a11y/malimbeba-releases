@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Malimbe by Beyond-A11y — accessibility prompt builder</title>
+<link rel="icon" type="image/png" href="assets/malimbe-favicon-32.png">
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #F5F7FF;
+    --surface: #FFFFFF;
+    --ink: #14181F;
+    --muted: #55606F;
+    --line: #7C8798;
+    --primary: #2F5DFF;      /* generate */
+    --primary-ink: #ffffff;
+    --primary-strong: #1D4ED8; /* text on the masthead's gradient-tinted background only -- #2F5DFF measures under 4.5:1 there */
+    --audit: #0E6E86;        /* audit */
+    --pass: #15803D;
+    --block: #DF3336;
+    --chip: #EEF2FF;
+    --focus: #F59E0B;        /* high-visibility focus ring */
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    --radius: 10px;
+    --shadow: 0 18px 42px rgba(47, 93, 255, 0.12);
+    --code-color: #0f172a;
+    --code-bg: #f8fafc;
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #07111D;
+    --surface: #111C2A;
+    --ink: #F3F6FB;
+    --muted: #A8B4C2;
+    --line: #263548;
+    --primary: #7FA2FF;
+    --primary-ink: #07111D;
+    --primary-strong: #7FA2FF; /* same as --primary -- dark mode already measures well above 4.5:1 here */
+    --audit: #3AA4C8;
+    --pass: #5CD69A;
+    --block: #FF7A7A;
+    --chip: #17263A;
+    --shadow: 0 20px 45px rgba(3, 10, 20, 0.32);
+    --code-color: #f8fbff;
+    --code-bg: #060b14;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: radial-gradient(circle at top left, rgba(47, 93, 255, 0.14), transparent 34%), var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 64px; }
+
+  /* Header */
+  .masthead { border-bottom: 2px solid var(--ink); padding-bottom: 18px; margin-bottom: 24px; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+  .masthead h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.05; letter-spacing: -0.02em; margin: 0; font-weight: 800; }
+  .masthead p { color: var(--muted); max-width: 62ch; margin: 10px 0 0; }
+  .theme-toggle { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 8px 12px; font: inherit; font-weight: 600; cursor: pointer; }
+  .theme-toggle:hover, .theme-toggle:focus-visible { border-color: var(--primary); color: var(--primary); }
+
+  .layout { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 28px; align-items: start; }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+  /* Panels */
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+  .panel-body { padding: 20px; }
+
+  fieldset { border: 0; margin: 0 0 22px; padding: 0; }
+  fieldset:last-of-type { margin-bottom: 0; }
+  legend { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding: 0; margin-bottom: 10px; font-weight: 600; }
+
+  label.field { display: block; margin-bottom: 14px; }
+  label.field[hidden] { display: none; }
+  label.field > span { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+  select, input[type="url"], input[type="text"] {
+    width: 100%; font: inherit; color: var(--ink); background: var(--surface);
+    border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; min-height: 44px;
+  }
+  select:hover, input[type="url"]:hover { border-color: #b9c1cd; }
+
+  /* Segmented mode control */
+  .segmented { display: flex; gap: 8px; }
+  .segmented .seg { position: relative; flex: 1; }
+  .segmented input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+  .segmented .seg-label {
+    display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; min-height: 44px;
+    border: 1px solid var(--line); border-radius: 8px; cursor: pointer; background: var(--surface);
+  }
+  .segmented .seg-label strong { font-size: 14px; }
+  .segmented .seg-label small { color: var(--muted); font-size: 12px; }
+  .segmented input:checked + .seg-label { border-color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary); }
+  .segmented .seg.audit input:checked + .seg-label { border-color: var(--audit); box-shadow: inset 0 0 0 1px var(--audit); }
+
+  .toggle { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+  .toggle input { margin-top: 3px; width: 18px; height: 18px; }
+  .toggle span { font-size: 13px; }
+  .toggle small { display: block; color: var(--muted); }
+
+  /* Tier badge */
+  .tier { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 12px; font-weight: 600;
+    border: 1px solid var(--line); border-radius: 999px; padding: 5px 11px; background: var(--chip); }
+  .tier .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); }
+  .tier[data-tier="1"] .dot { background: #2563EB; }
+  .tier[data-tier="2"] .dot { background: #B45309; }
+  .tier[data-tier="3"] .dot { background: var(--block); }
+
+  /* Output */
+  .out-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-family: var(--mono); font-size: 11px; color: var(--ink); background: var(--chip); border-radius: 6px; padding: 4px 8px; }
+  .chip b { font-weight: 700; }
+  pre.prompt {
+    margin: 0; padding: 18px 16px; font-family: var(--mono); font-size: 12.5px; line-height: 1.6;
+    white-space: pre-wrap; word-break: break-word; max-height: 62vh; overflow: auto; color: var(--code-color); background: var(--code-bg);
+  }
+  .btn {
+    font: inherit; font-weight: 600; border: 1px solid transparent; border-radius: 8px; padding: 10px 16px;
+    min-height: 44px; cursor: pointer; background: var(--primary); color: var(--primary-ink);
+  }
+  .btn:hover { filter: brightness(1.05); }
+  .btn.secondary { background: var(--surface); color: var(--ink); border-color: var(--line); }
+  .status { font-size: 13px; color: var(--pass); font-weight: 600; min-height: 20px; }
+
+  /* Focus — high visibility, dogfooding the tool's own rules */
+  a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, .segmented input:focus-visible + .seg-label {
+    outline: 3px solid var(--focus); outline-offset: 2px;
+  }
+
+  .hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  .sr-only:focus { position: static; width: auto; height: auto; margin: 0; overflow: visible; clip: auto; white-space: normal; display: inline-block; padding: 8px 14px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; }
+  .foot { margin-top: 28px; color: var(--muted); font-size: 12px; max-width: 70ch; }
+  .foot code { font-family: var(--mono); background: var(--chip); padding: 1px 5px; border-radius: 4px; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<a href="#main-content" class="sr-only">Skip to main content</a>
+<div class="wrap">
+  <header class="masthead">
+    <p class="eyebrow"><img src="assets/malimbe-favicon-32.png" alt="" width="16" height="16" style="vertical-align:-2px;margin-right:6px">Malimbe · Prompt Builder <a href="./guided.html" style="color:var(--primary-strong);text-transform:none;letter-spacing:0;font-family:var(--sans);margin-left:10px">Not sure where to start? Use guided mode →</a></p>
+    <h1>Build a prompt that ships accessible components.</h1>
+    <p>Pick what you're making and where it runs. This assembles a precise, standards-grounded prompt — WCAG 2.2, W3C, and the ARIA Authoring Practices Guide as the default pattern sets — to paste into Claude Code, Codex, or any agentic coding tool. The accessibility MCP server and skills ride along in the payload.</p>
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false"><span aria-hidden="true">🌙</span> Dark mode</button>
+  </header>
+
+  <main id="main-content">
+  <div class="layout">
+    <!-- Controls -->
+    <form class="panel" id="form" aria-label="Prompt options">
+      <div class="panel-body">
+        <fieldset>
+          <legend>Mode</legend>
+          <div class="segmented" role="radiogroup" aria-label="What do you want to do">
+            <div class="seg">
+              <input type="radio" name="mode" id="mode-generate" value="generate" checked>
+              <label class="seg-label" for="mode-generate"><strong>Generate</strong><small>Create a component or design system</small></label>
+            </div>
+            <div class="seg audit">
+              <input type="radio" name="mode" id="mode-audit" value="audit">
+              <label class="seg-label" for="mode-audit"><strong>Audit</strong><small>Review an existing URL</small></label>
+            </div>
+          </div>
+        </fieldset>
+
+        <p style="margin:0 0 20px"><a href="./component-tester.html?from=index" class="btn secondary">Review this component</a></p>
+
+        <!-- GENERATE fields -->
+        <div id="generate-fields">
+          <fieldset>
+            <legend>What to build</legend>
+            <label class="field" for="component">
+              <span>Component type</span>
+              <select id="component" name="component"></select>
+            </label>
+            <p id="tier-readout" aria-live="polite" style="margin:-6px 0 14px;">
+              <span class="tier" id="tier-badge" data-tier=""><span class="dot"></span><span id="tier-text">—</span></span>
+            </p>
+            <label class="field" for="framework">
+              <span>Framework / language</span>
+              <select id="framework" name="framework">
+                <option value="html">Plain HTML</option>
+                <option value="react">React</option>
+                <option value="angular">Angular</option>
+                <option value="blazor">Blazor (Telerik UI)</option>
+                <option value="vue">Vue</option>
+                <option value="web-components">Web Components</option>
+              </select>
+            </label>
+            <label class="field" for="platform">
+              <span>Platform</span>
+              <select id="platform" name="platform">
+                <option value="web">Web (all platforms)</option>
+                <option value="ios">iOS</option>
+                <option value="android">Android</option>
+                <option value="windows">Windows (PC)</option>
+                <option value="macos">macOS</option>
+              </select>
+            </label>
+            <label class="field" for="ds-kind">
+              <span>Design system source (provenance)</span>
+              <select id="ds-kind" name="ds-kind">
+                <option value="none">None — greenfield component</option>
+                <option value="deployed">Deployed app / Storybook URL</option>
+                <option value="package">Published package (pkg@version)</option>
+                <option value="ci-build">Repository at commit (repo@SHA)</option>
+                <option value="figma">Figma file/frame link</option>
+                <option value="xd">Adobe XD file/link</option>
+                <option value="screenshot">Screenshot / mockup image</option>
+              </select>
+            </label>
+            <label class="field" for="ds-image" id="ds-image-wrap" hidden>
+              <span>Upload a screenshot (optional)</span>
+              <input type="file" id="ds-image" name="ds-image" accept="image/png,image/jpeg,image/webp,image/gif" aria-describedby="ds-image-hint ds-image-status">
+              <span class="hint" id="ds-image-hint">Stays in this browser tab only. Files under ~150KB are embedded in the copied prompt as both a Markdown image and a raw data-URI fallback. Some external agents strip rendered data images; if it does not appear, attach the original file directly. Larger files are referenced by name only.</span>
+            </label>
+            <p class="hint" id="ds-image-status" role="status" aria-live="polite"></p>
+            <img id="ds-image-preview" alt="" hidden style="max-width:220px;max-height:160px;border:1px solid var(--line);border-radius:8px;display:block;margin:4px 0 0">
+            <label class="field" for="ds-ref" id="ds-ref-wrap" hidden>
+              <span>Source reference</span>
+              <input type="text" id="ds-ref" name="ds-ref" placeholder="https://ds.acme.com  ·  @acme/ds@2.4.1  ·  acme/ds@a1b2c3d  ·  https://figma.com/file/...  ·  checkout-mockup.png">
+              <span class="hint">Carried into the prompt as the source of truth. Figma/XD/screenshot sources describe the visual/interaction spec only — the built code still needs its own deployed/package/ci-build reference to satisfy the release gate. A screenshot is a single static frame: states like hover/focus/disabled/error/loading must still be inferred from the pattern's contract, not the image.</span>
+            </label>
+            <label class="field" for="ds-tokens">
+              <span>Design tokens (optional)</span>
+              <textarea id="ds-tokens" name="ds-tokens" rows="3" placeholder="--color-accent: #2f5dff;&#10;--space-3: 12px;&#10;or a token JSON blob" style="width:100%; font:inherit; color:var(--ink); background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:10px 12px;"></textarea>
+              <span class="hint">CSS custom properties, a token JSON blob, or plain name:value pairs — carried into the prompt verbatim so the agent uses your values instead of inventing new ones.</span>
+            </label>
+          </fieldset>
+        </div>
+
+        <!-- AUDIT fields -->
+        <div id="audit-fields" hidden>
+          <fieldset>
+            <legend>Target</legend>
+            <label class="field" for="url">
+              <span>URL to audit</span>
+              <input type="url" id="url" name="url" placeholder="https://example.com/page" inputmode="url">
+              <span class="hint">Both Copy and Run default to a11y_audit_axe — a real-browser scan (the audit of record), not a quick fetch. Requires Playwright/Chromium; falls back to a11y_audit_url if unavailable.</span>
+            </label>
+            <label class="toggle"><input type="checkbox" id="opt-crawl">
+              <span>Crawl the site<small>Follow same-origin links and audit multiple pages.</small></span></label>
+            <label class="field" for="prov-kind">
+              <span>Artifact provenance</span>
+              <select id="prov-kind" name="prov-kind">
+                <option value="deployed">Deployed app / pinned Storybook</option>
+                <option value="package">Published package bundle</option>
+                <option value="ci-build">CI build at a commit</option>
+                <option value="pasted">Pasted snippet (not evidence)</option>
+              </select>
+              <span class="hint">Only deployed / package / ci-build with a reference can satisfy the automated gate.</span>
+            </label>
+            <label class="field" for="prov-ref" id="prov-ref-wrap" hidden>
+              <span>Provenance reference</span>
+              <input type="text" id="prov-ref" name="prov-ref" placeholder="@acme/ds@2.4.1  ·  acme/ds@a1b2c3d">
+            </label>
+            <label class="field" for="max-pages" id="max-pages-wrap" hidden>
+              <span>Maximum pages (up to 20)</span>
+              <input type="number" id="max-pages" name="max-pages" min="1" max="20" value="20" step="1">
+              <span class="hint">Choose how far the crawl should go. The audit will stop once it reaches this limit (up to 20 pages).</span>
+            </label>
+            <label class="field" for="source-pattern">
+              <span>Source pattern (optional)</span>
+              <input type="text" id="source-pattern" name="source-pattern" placeholder="@acme/ds@2.4.1  ·  acme/ds@a1b2c3d">
+              <span class="hint">For internal/repo targets: also check rendered widgets against this design-system's pattern (a11y_audit_axe's source_pattern).</span>
+            </label>
+          </fieldset>
+        </div>
+
+        <fieldset>
+          <legend>Standard</legend>
+          <label class="field" for="level">
+            <span>WCAG conformance level</span>
+            <select id="level" name="level">
+              <option value="A">WCAG 2.2 Level A</option>
+              <option value="A and AA" selected>WCAG 2.2 Level A and AA</option>
+              <option value="AAA">WCAG 2.2 Level AAA</option>
+            </select>
+          </label>
+          <label class="field" for="agent">
+            <span>Target coding agent</span>
+            <select id="agent" name="agent">
+              <option value="claude-code">Claude Code</option>
+              <option value="codex">ChatGPT / Codex</option>
+              <option value="generic">Other / generic</option>
+            </select>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Payload</legend>
+          <label class="toggle"><input type="checkbox" id="opt-mcp" checked>
+            <span>Include MCP + Skills setup<small>Prepend server config and tool instructions so the paste is self-contained.</small></span></label>
+          <label class="toggle" id="opt-tests-wrap"><input type="checkbox" id="opt-tests" checked>
+            <span>Require tests &amp; ARIA assertions<small>Ask the agent to produce interaction/focus/state tests.</small></span></label>
+        </fieldset>
+      </div>
+    </form>
+
+    <!-- Output -->
+    <section class="panel" aria-labelledby="out-title">
+      <h2 id="out-title" class="sr-only">Generated prompt</h2>
+      <div class="out-head">
+        <div class="chips" id="chips" aria-hidden="true"></div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <span class="status" id="status" role="status" aria-live="polite"></span>
+          <button type="submit" form="form" class="btn" id="run-btn" hidden>Run the audit</button>
+          <button type="button" class="btn secondary" id="select-btn">Select all prompt content</button>
+          <button type="button" class="btn secondary" id="copy-btn">Copy prompt</button>
+        </div>
+      </div>
+      <pre class="prompt" id="prompt" tabindex="0" aria-label="Generated prompt text"></pre>
+    </section>
+
+    <!-- Handoff spec (generate mode only) — a deliverable to send to the developer, not another block of on-screen text -->
+    <section class="panel" aria-labelledby="handoff-title" id="handoff-section" hidden style="margin-top:20px;">
+      <h2 id="handoff-title" class="sr-only">Handoff spec</h2>
+      <div class="out-head">
+        <span style="font-weight:600; font-size:13px;">Handoff spec — a file to send your developer (ticket, PR description, design review), not another prompt</span>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <span class="status" id="handoff-status" role="status" aria-live="polite"></span>
+          <button type="button" class="btn secondary" id="handoff-download-btn">Download handoff spec (.md)</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <p class="foot">This form calls the exact same prompt builders as the MCP tools <code>a11y_build_prompt</code> (generate) and <code>a11y_build_audit_prompt</code> (audit) — not a re-implementation, the same compiled code. Generation modes map to the release gate — a generated component should pass <code>a11y_release_gate</code> before merge; an audit should end in a gate verdict with no critical defects remaining.</p>
+  </main>
+</div>
+
+<script type="module">
+import { CATALOG, CATALOG_INDEX, catalogLabel, TIER_LABEL } from "./generated/rules/catalog.js";
+import { buildPrompt, buildHandoffSpec, FRAMEWORK_NAMES, PLATFORM_NAMES, MAX_INLINE_IMAGE_DATA_URI_LENGTH } from "./generated/rules/promptBuilder.js";
+import { buildAuditPrompt } from "./generated/rules/auditPromptBuilder.js";
+
+const root = document.documentElement;
+const toggle = document.getElementById('theme-toggle');
+const storedTheme = localStorage.getItem('malimbeba-ui-theme');
+const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+const initialTheme = storedTheme || (systemPrefersDark ? 'dark' : 'light');
+const applyTheme = (theme) => {
+  root.setAttribute('data-theme', theme);
+  if (toggle) {
+    toggle.innerHTML = theme === 'dark' ? '<span aria-hidden="true">☀</span> Light mode' : '<span aria-hidden="true">🌙</span> Dark mode';
+    toggle.setAttribute('aria-pressed', String(theme === 'dark'));
+  }
+  localStorage.setItem('malimbeba-ui-theme', theme);
+};
+applyTheme(initialTheme);
+if (toggle) {
+  toggle.addEventListener('click', () => applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+  if (!localStorage.getItem('malimbeba-ui-theme')) {
+    applyTheme(event.matches ? 'dark' : 'light');
+  }
+});
+
+(function () {
+  "use strict";
+
+  // Component list, contracts, tiers, framework/platform notes, and the
+  // prompt text itself all come from ./generated/ — the same compiled
+  // modules the a11y_build_prompt / a11y_build_audit_prompt MCP tools call.
+  // This file has no policy/pattern data of its own to keep in sync.
+
+  // ---- DOM refs ----------------------------------------------------------
+  var $ = function (id) { return document.getElementById(id); };
+  var componentSel = $("component");
+
+  // Populate component select grouped by tier — driven entirely by CATALOG,
+  // so a pattern added there appears here with zero UI changes.
+  [1, 2, 3].forEach(function (t) {
+    var og = document.createElement("optgroup");
+    og.label = "Tier " + t + " · " + TIER_LABEL[t];
+    CATALOG.filter(function (c) { return c.tier === t; }).forEach(function (c) {
+      var o = document.createElement("option");
+      o.value = c.component; o.textContent = c.label; og.appendChild(o);
+    });
+    componentSel.appendChild(og);
+  });
+  componentSel.value = "dialog";
+
+  // Holds the last-selected screenshot in-memory for this tab only — never sent anywhere until the user copies/runs a prompt.
+  var heldImage = { dataUri: undefined, name: "", tooLarge: false };
+  // Holds the last-built handoff spec text — produced as a downloadable file on demand, never printed on screen.
+  var heldHandoff = "";
+
+  $("ds-image").addEventListener("change", function () {
+    var file = this.files && this.files[0];
+    var statusEl = $("ds-image-status");
+    var previewEl = $("ds-image-preview");
+    if (!file) { heldImage = { dataUri: undefined, name: "", tooLarge: false }; previewEl.hidden = true; statusEl.textContent = ""; return; }
+    $("ds-ref").value = file.name;
+    var reader = new FileReader();
+    reader.onload = function () {
+      var dataUri = String(reader.result);
+      var tooLarge = dataUri.length > MAX_INLINE_IMAGE_DATA_URI_LENGTH;
+      heldImage = { dataUri: tooLarge ? undefined : dataUri, name: file.name, tooLarge: tooLarge };
+      previewEl.src = dataUri;
+      previewEl.alt = "Preview of uploaded screenshot: " + file.name;
+      previewEl.hidden = false;
+      statusEl.textContent = tooLarge
+        ? file.name + " (" + Math.round(file.size / 1024) + "KB) is too large to embed — it will be referenced by name only. Attach the original file to your agent yourself."
+        : file.name + " (" + Math.round(file.size / 1024) + "KB) will be embedded in the copied prompt as a Markdown image plus a raw data-URI fallback.";
+      render();
+    };
+    reader.readAsDataURL(file);
+  });
+
+  function state() {
+    return {
+      mode: document.querySelector('input[name="mode"]:checked').value,
+      component: componentSel.value,
+      framework: $("framework").value,
+      platform: $("platform").value,
+      level: $("level").value,
+      agent: $("agent").value,
+      url: $("url").value.trim(),
+      dsKind: $("ds-kind").value,
+      dsRef: $("ds-ref").value.trim(),
+      dsImageDataUri: heldImage.dataUri,
+      dsTokens: $("ds-tokens").value.trim(),
+      provKind: $("prov-kind").value,
+      provRef: $("prov-ref").value.trim(),
+      sourcePattern: $("source-pattern").value.trim(),
+      crawl: $("opt-crawl").checked,
+      maxPages: Math.max(1, Math.min(25, parseInt($("max-pages").value, 10) || 20)),
+      mcp: $("opt-mcp").checked,
+      tests: $("opt-tests").checked
+    };
+  }
+
+  function tierOf(v) { return CATALOG_INDEX.has(v) ? CATALOG_INDEX.get(v).tier : ""; }
+  function label(v) { return catalogLabel(v); }
+  function platformLabel(v) { return PLATFORM_NAMES[v]; }
+
+  // Maps this form's state directly onto the shared builder's input shape.
+  // No prompt text is assembled here \u2014 buildPrompt() (imported) is the only
+  // place that happens, so this UI can never drift from a11y_build_prompt.
+  function buildGenerate(s) {
+    return buildPrompt({
+      component: s.component,
+      framework: s.framework,
+      platform: s.platform,
+      wcagLevel: s.level,
+      designSystem: { kind: s.dsKind, ref: s.dsRef, imageDataUri: s.dsKind === "screenshot" ? s.dsImageDataUri : undefined },
+      designTokens: s.dsTokens,
+      includeTests: s.tests,
+      includeMcpSetup: s.mcp,
+      agent: s.agent,
+    });
+  }
+
+  // Same design-source/tokens facts as buildGenerate(), formatted as a
+  // standalone document for a ticket or design review instead of an agent prompt.
+  function buildHandoff(s) {
+    return buildHandoffSpec({
+      component: s.component,
+      framework: s.framework,
+      platform: s.platform,
+      wcagLevel: s.level,
+      designSystem: { kind: s.dsKind, ref: s.dsRef, imageDataUri: s.dsKind === "screenshot" ? s.dsImageDataUri : undefined },
+      designTokens: s.dsTokens,
+    });
+  }
+
+  // Maps this form's state directly onto the shared audit builder's input
+  // shape. No prompt text is assembled here either — buildAuditPrompt()
+  // (imported) is the only place that happens, so this UI can never drift
+  // from a11y_build_audit_prompt or from ui/guided.html's audit prompt.
+  function buildAudit(s) {
+    return buildAuditPrompt({
+      target: s.url,
+      kind: "auto",
+      crawl: s.crawl,
+      maxPages: s.maxPages,
+      wcagLevel: s.level,
+      platform: s.platform,
+      provenanceKind: s.provKind,
+      provenanceRef: s.provRef,
+      sourcePattern: s.sourcePattern || undefined,
+      includeMcpSetup: s.mcp,
+      agent: s.agent,
+    });
+  }
+
+  function render() {
+    var s = state();
+    // toggle field groups
+    $("generate-fields").hidden = s.mode !== "generate";
+    $("audit-fields").hidden = s.mode !== "audit";
+    $("opt-tests-wrap").style.display = s.mode === "generate" ? "flex" : "none";
+    $("ds-ref-wrap").hidden = !(s.mode === "generate" && s.dsKind !== "none");
+    $("ds-image-wrap").hidden = !(s.mode === "generate" && s.dsKind === "screenshot");
+    if ($("ds-image-wrap").hidden) { $("ds-image-preview").hidden = true; $("ds-image-status").textContent = ""; }
+    $("prov-ref-wrap").hidden = !(s.mode === "audit" && s.provKind !== "deployed");
+    $("max-pages-wrap").hidden = !(s.mode === "audit" && s.crawl);
+    $("run-btn").hidden = s.mode !== "audit";
+
+    // tier badge
+    var t = tierOf(s.component);
+    var badge = $("tier-badge");
+    badge.setAttribute("data-tier", s.mode === "generate" ? String(t) : "");
+    $("tier-text").textContent = s.mode === "generate"
+      ? ("Tier " + t + " · " + TIER_LABEL[t])
+      : "—";
+
+    // chips
+    var chips = [];
+    if (s.mode === "generate") {
+      chips = [["mode", "generate"], ["component", label(s.component)], ["framework", FRAMEWORK_NAMES[s.framework]], ["platform", platformLabel(s.platform)], ["wcag", "2.2 " + s.level]];
+    } else {
+      chips = [["mode", "audit"], ["platform", platformLabel(s.platform)], ["wcag", "2.2 " + s.level], ["agent", s.agent]];
+    }
+    $("chips").innerHTML = chips.map(function (c) { return '<span class="chip"><b>' + c[0] + '</b> ' + escapeHtml(c[1]) + '</span>'; }).join("");
+
+    // prompt
+    var text = s.mode === "generate" ? buildGenerate(s) : buildAudit(s);
+    $("prompt").textContent = text;
+    setStatus("");
+
+    // handoff spec (generate mode only) — held in memory only, produced as a file on demand, never printed on screen
+    $("handoff-section").hidden = s.mode !== "generate";
+    if (s.mode === "generate") { heldHandoff = buildHandoff(s); $("handoff-status").textContent = ""; }
+  }
+
+  function escapeHtml(x) { return String(x).replace(/[&<>"]/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]; }); }
+  function setStatus(msg) { $("status").textContent = msg; }
+
+  // ---- copy / select -----------------------------------------------------
+  function copyText(text, okMsg) {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(function () { setStatus(okMsg); }, fallbackCopy);
+    } else { fallbackCopy(); }
+    function fallbackCopy() {
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); setStatus(okMsg); }
+      catch (e) { setStatus("Press Ctrl/Cmd+C to copy"); selectPrompt(); }
+      document.body.removeChild(ta);
+    }
+  }
+  function copyPrompt() { copyText($("prompt").textContent, "Copied to clipboard"); }
+
+  // The "Run" button sends the exact same prompt as "Copy" — same task,
+  // just delivered via window.sendPrompt instead of the clipboard. This
+  // used to be a fourth hand-rolled near-duplicate of the audit prompt.
+  function buildRunInstruction(s) {
+    return buildAudit(s) + "\n\nPrint the results here in the chat.";
+  }
+  function runAudit() {
+    var s = state();
+    if (!s.url) { setStatus("Enter a URL first"); $("url").focus(); return; }
+    var instr = buildRunInstruction(s);
+    if (typeof window.sendPrompt === "function") { window.sendPrompt(instr); setStatus("Running the audit in your agent…"); }
+    else { runAuditThroughBridge(s); }
+  }
+  async function runAuditThroughBridge(s) {
+    setStatus("Running the audit…");
+    var button = $("run-btn");
+    button.disabled = true;
+    try {
+      var bridgeUrl = window.location.protocol === "file:"
+        ? "http://127.0.0.1:4173/api/audit"
+        : "/api/audit";
+      var response = await fetch(bridgeUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          url: s.url,
+          crawl: s.crawl,
+          max_pages: s.maxPages,
+          level: s.level,
+          platform: s.platform,
+        }),
+      });
+      var payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || "The audit bridge returned an error.");
+      $("prompt").textContent = payload.markdown || JSON.stringify(payload.report, null, 2);
+      setStatus("Audit complete — report returned below.");
+    } catch (error) {
+      setStatus(error && error.message === "Failed to fetch"
+        ? "Start the UI bridge with npm run ui, then try again."
+        : (error && error.message ? error.message : "The audit bridge could not be reached."));
+    } finally {
+      button.disabled = false;
+    }
+  }
+  function selectPrompt() {
+    var el = $("prompt"); el.focus();
+    var r = document.createRange(); r.selectNodeContents(el);
+    var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+    setStatus("Selected — copy with Ctrl/Cmd+C");
+  }
+  function downloadHandoff() {
+    var s = state();
+    if (!heldHandoff) { $("handoff-status").textContent = "Describe or pick a component first."; return; }
+    var filename = "handoff-" + (s.component ? s.component.replace(/\s+/g, "-") : "component") + ".md";
+    var blob = new Blob([heldHandoff], { type: "text/markdown" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    $("handoff-status").textContent = "Downloaded " + filename + " — send it to your developer.";
+  }
+
+  // ---- wire up -----------------------------------------------------------
+  $("form").addEventListener("input", render);
+  $("form").addEventListener("change", render);
+  // Registered after the render() listener above so it runs after render()'s
+  // own setStatus("") -- announces the mode switch without re-announcing on
+  // every other field change, which render() already handles silently.
+  $("form").addEventListener("change", function (e) {
+    if (e.target && e.target.name === "mode") setStatus((e.target.value === "generate" ? "Generate" : "Audit") + " mode selected.");
+  });
+  // run-btn is a real type="submit" control (via form="form") so keyboard
+  // users get native Enter-to-submit in audit mode; this form has no
+  // server-side action, so route it through the same handler as a click.
+  $("form").addEventListener("submit", function (e) { e.preventDefault(); runAudit(); });
+  $("copy-btn").addEventListener("click", copyPrompt);
+  $("handoff-download-btn").addEventListener("click", downloadHandoff);
+  $("select-btn").addEventListener("click", selectPrompt);
+  $("run-btn").addEventListener("click", runAudit);
+
+  render();
+})();
+</script>
+</body>
+</html>

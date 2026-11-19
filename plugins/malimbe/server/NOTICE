@@ -1,0 +1,18 @@
+Malimbe by Beyond-A11y (malimbeba)
+Copyright (c) 2026 Beyond-A11y, LLC. All rights reserved.
+
+This product is proprietary software of Beyond-A11y, LLC, licensed under the
+terms in the accompanying LICENSE file (a 30-day evaluation license). It is not
+open source and is not offered under any OSI-approved license. Redistribution,
+resale, or public disclosure is prohibited except as expressly permitted in
+writing by Beyond-A11y, LLC.
+
+Third-party components are used under their respective licenses (see the
+dependencies declared in package.json and their published license terms):
+  - @modelcontextprotocol/sdk
+  - axe-core (axe-core is licensed by Deque Systems under MPL-2.0)
+  - node-html-parser
+  - zod
+  - playwright-core (optional dependency)
+
+Contact: info@beyond-a11y.com

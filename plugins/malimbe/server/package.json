@@ -1,0 +1,98 @@
+{
+  "name": "malimbeba",
+  "version": "0.6.0",
+  "description": "Malimbe by Beyond-A11y — build accessible components and audit live sites, repos, and unhosted code against WCAG 2.2 Level A and AA, right inside your agentic coding tool.",
+  "type": "module",
+  "bin": {
+    "malimbeba": "dist/index.js",
+    "accessibility-mcp-server": "dist/index.js",
+    "malimbeba-doctor": "dist/doctor.js",
+    "malimbeba-license": "dist/license.js",
+    "malimbeba-ui": "ui/server.mjs"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "node scripts/embed-skills.mjs && tsc && node -e \"try{require('fs').chmodSync('dist/index.js',0o755);require('fs').chmodSync('ui/server.mjs',0o755)}catch(e){}\" && node scripts/build-ui-data.mjs",
+    "start": "node dist/index.js",
+    "ui": "node ui/server.mjs",
+    "dev": "tsc --watch",
+    "smoke": "node dist/smoke.js",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run build",
+    "test": "npm run build && node --test test/*.test.js",
+    "test:browser": "npm run build && cross-env MALIMBEBA_BROWSER_TESTS=1 node --test test/*.test.js",
+    "doctor": "node dist/doctor.js"
+  },
+  "keywords": [
+    "a11y",
+    "accessibility",
+    "aria",
+    "axe-core",
+    "beyond-a11y",
+    "design-system",
+    "mcp",
+    "model-context-protocol",
+    "playwright",
+    "malimbeba",
+    "vscode",
+    "wcag",
+    "wcag22"
+  ],
+  "license": "SEE LICENSE IN LICENSE",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "axe-core": "^4.12.1",
+    "he": "^1.2.0",
+    "node-html-parser": "^7.0.1",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "cross-env": "^7.0.3",
+    "typescript": "^5.7.2"
+  },
+  "optionalDependencies": {
+    "playwright-core": "^1.61.1"
+  },
+  "engines": {
+    "node": ">=18.17"
+  },
+  "files": [
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "CONFIG.md",
+    "LICENSE",
+    "NOTICE",
+    "README.md",
+    "TUTORIAL.md",
+    "WORKFLOWS.md",
+    "components/README.md",
+    "components/carousel.js",
+    "dist",
+    "ui/assets",
+    "ui/carousel-demo.html",
+    "ui/cedar-basket-demo.html",
+    "ui/component-tester.html",
+    "ui/country-combobox-demo.html",
+    "ui/country-combobox.js",
+    "ui/generated",
+    "ui/guided.html",
+    "ui/index.html",
+    "ui/radio-group-demo.html",
+    "ui/server.mjs",
+    "ui/tutorial.html"
+  ],
+  "mcpName": "io.github.beyond-a11y/malimbe",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beyond-a11y/malimbeba-releases.git"
+  },
+  "author": "Beyond-A11y (https://beyond-a11y.com)",
+  "homepage": "https://beyond-a11y.com",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "email": "info@beyond-a11y.com"
+  }
+}

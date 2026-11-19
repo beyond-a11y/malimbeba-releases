@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Malimbe by Beyond-A11y — guided</title>
+<link rel="icon" type="image/png" href="assets/malimbe-favicon-32.png">
+<style>
+  :root{color-scheme:light;--bg:#F5F7FF;--surface:#fff;--ink:#14181F;--muted:#55606F;--line:#7C8798;--accent:#2F5DFF;--accent-strong:#1D4ED8;--accent-ink:#fff;--accentbg:#EEF2FF;--pass:#15803D;--focus:#F59E0B;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--sans:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;--shadow:0 18px 42px rgba(47, 93, 255, 0.12);--code-color:#0f172a;--code-bg:#f8fafc}
+  :root[data-theme="dark"]{color-scheme:dark;--bg:#07111D;--surface:#111C2A;--ink:#F3F6FB;--muted:#A8B4C2;--line:#263548;--accent:#7FA2FF;--accent-strong:#7FA2FF;--accent-ink:#07111D;--accentbg:#17263A;--pass:#5CD69A;--shadow:0 20px 45px rgba(3, 10, 20, 0.32);--code-color:#f8fbff;--code-bg:#060b14}
+  *{box-sizing:border-box}html,body{margin:0}
+  body{background:radial-gradient(circle at top left,rgba(47,93,255,.14),transparent 34%),var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55}
+  .wrap{max-width:900px;margin:0 auto;padding:28px 20px 64px}
+  .masthead{border-bottom:2px solid var(--ink);padding-bottom:16px;margin-bottom:22px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+  h1{font-size:clamp(24px,4vw,34px);margin:0;letter-spacing:-.02em;font-weight:800}
+  .masthead p{color:var(--muted);max-width:64ch;margin:10px 0 0}
+  .theme-toggle{display:inline-flex;align-items:center;gap:8px;margin-top:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 12px;font:inherit;font-weight:600;cursor:pointer}
+  .theme-toggle:hover,.theme-toggle:focus-visible{border-color:var(--accent);color:var(--accent)}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:16px}
+  label.lab,span.lab{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
+  .hint{font-size:12.5px;color:var(--muted);margin:0 0 8px}
+  textarea,input[type=text],select{width:100%;font:inherit;font-size:14px;color:var(--ink);background:var(--surface);
+    border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-height:44px}
+  textarea{resize:vertical}
+  .big{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  @media(max-width:720px){.big{grid-template-columns:1fr}}
+  .big button,.big a{display:flex;flex-direction:column;gap:3px;align-items:flex-start;text-align:left;padding:16px;border:1px solid var(--line);
+    border-radius:10px;background:var(--surface);color:var(--ink);cursor:pointer;font:inherit;min-height:44px;text-decoration:none}
+  .big button[aria-pressed=true]{border-color:var(--accent);background:var(--accentbg);box-shadow:inset 0 0 0 1px var(--accent)}
+  .big strong{font-size:14.5px}.big small{font-size:12.5px;color:var(--muted)}
+  .detect{background:var(--accentbg);border-radius:10px;padding:12px 14px;margin:12px 0;font-size:13.5px}
+  button.act{font:inherit;font-weight:600;min-height:44px;padding:0 16px;border-radius:8px;border:1px solid var(--accent);
+    background:var(--accent);color:var(--accent-ink);cursor:pointer}
+  pre.out{font-family:var(--mono);font-size:12.5px;line-height:1.6;white-space:pre-wrap;word-break:break-word;background:var(--code-bg);color:var(--code-color);
+    border:1px solid var(--line);border-radius:10px;padding:14px;max-height:420px;overflow:auto;margin:0}
+  details{margin-top:12px}summary{cursor:pointer;font-size:13.5px;color:var(--muted);min-height:44px;display:flex;align-items:center}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 10px}
+  .status{font-size:13.5px;color:var(--pass);font-weight:600}
+  a{color:var(--accent)}
+  .masthead p a{color:var(--accent-strong)}
+  :focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .sr-only:focus{position:static;width:auto;height:auto;margin:0;overflow:visible;clip:auto;white-space:normal;display:inline-block;padding:8px 14px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px}
+  .foot{font-size:12.5px;color:var(--muted);max-width:70ch}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<a href="#main-content" class="sr-only">Skip to main content</a>
+<div class="wrap">
+  <header class="masthead">
+    <p class="eyebrow"><img src="assets/malimbe-favicon-32.png" alt="" width="16" height="16" style="vertical-align:-2px;margin-right:6px">Malimbe · Guided</p>
+    <h1>Describe what you need. Get the prompt.</h1>
+    <p>Write it the way you'd say it to a teammate — no accessibility jargon required. This works out the right pattern and writes a complete prompt for your coding agent, including the keyboard and focus rules that are easy to forget. Need the full control set? <a href="./index.html">Open the expert view</a>.</p>
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false"><span aria-hidden="true">🌙</span> Dark mode</button>
+  </header>
+
+  <main id="main-content">
+  <div class="panel">
+    <span class="lab" id="q1">What do you want to do?</span>
+    <div class="big" role="group" aria-labelledby="q1">
+      <button type="button" class="m-btn" data-m="build" aria-pressed="true"><strong>Build something</strong><small>Create a new component or design system</small></button>
+      <button type="button" class="m-btn" data-m="check" aria-pressed="false"><strong>Check my work</strong><small>Audit a repo, preview URL, or live site</small></button>
+      <a href="./component-tester.html?from=guided"><strong>Review this component</strong><small>Paste code and see exactly what renders, issue by issue</small></a>
+    </div>
+  </div>
+
+  <div class="panel" id="build-side">
+    <label class="lab" for="desc">Describe what you need, in your own words</label>
+    <p class="hint">For example: “a dropdown where users search and pick their country”.</p>
+    <textarea id="desc" rows="3"></textarea>
+    <p class="detect" id="detect" role="status" aria-live="polite"></p>
+    <label class="lab" for="fw">What are you building it in?</label>
+    <select id="fw">
+      <option value="react">React</option><option value="angular">Angular</option>
+      <option value="vue">Vue</option><option value="blazor">Blazor (Telerik UI)</option>
+      <option value="web-components">Web Components</option><option value="html">Plain HTML</option>
+    </select>
+    <p style="margin:12px 0 0"><label><input type="checkbox" id="ds-toggle"> Optional: point it at your design system</label></p>
+    <div id="ds-toggle-wrap" hidden style="margin-top:8px">
+      <p class="hint" style="margin-top:8px">Paste a Storybook URL, an npm package, a repo, a Figma/Adobe XD file link, or the filename of a screenshot/mockup. The prompt will tell your agent to match your existing tokens and conventions instead of inventing new ones.</p>
+      <label class="lab" for="ds">Design system reference</label>
+      <input type="text" id="ds" placeholder="https://ds.acme.com · @acme/ds@2.4.1 · acme/ds@a1b2c3d · https://figma.com/file/... · checkout-mockup.png" aria-describedby="ds-hint">
+      <p class="hint" id="ds-hint">Use a deployed URL, package name, repo reference, a Figma/Adobe XD link, or a screenshot filename. Design-file and screenshot sources are a visual spec, not a rendered artifact — they can't satisfy the release gate on their own, and a screenshot alone can't show hover/focus/disabled/error/loading states.</p>
+      <label class="lab" for="ds-image" style="margin-top:10px;display:block">Or upload a screenshot</label>
+      <input type="file" id="ds-image" accept="image/png,image/jpeg,image/webp,image/gif" aria-describedby="ds-image-hint ds-image-status">
+      <p class="hint" id="ds-image-hint">Stays in this browser tab only. Files under ~150KB are embedded in the copied prompt as both a Markdown image and a raw data-URI fallback. Some external agents strip rendered data images; if it does not appear, attach the original file directly. Larger files are referenced by filename only.</p>
+      <p class="hint" id="ds-image-status" role="status" aria-live="polite"></p>
+      <img id="ds-image-preview" alt="" hidden style="max-width:200px;max-height:150px;border:1px solid var(--line);border-radius:8px;display:block;margin:4px 0 0">
+      <label class="lab" for="ds-tokens" style="margin-top:10px;display:block">Design tokens (optional)</label>
+      <textarea id="ds-tokens" rows="3" placeholder="--color-accent: #2f5dff;&#10;--space-3: 12px;&#10;or a token JSON blob" aria-describedby="ds-tokens-hint"></textarea>
+      <p class="hint" id="ds-tokens-hint">CSS custom properties, a token JSON blob, or plain name:value pairs — carried into the prompt verbatim so the agent uses your values instead of inventing new ones.</p>
+    </div>
+    <p style="margin:12px 0 0"><label><input type="checkbox" id="ovr"> Let me pick the pattern myself</label></p>
+    <div id="ovr-wrap" hidden style="margin-top:8px"><label class="sr-only" for="pat">Pattern</label><select id="pat"></select></div>
+  </div>
+
+  <div class="panel" id="check-side" hidden>
+    <label class="lab" for="tgt">What should it check?</label>
+    <p class="hint">A live site, a preview URL, localhost, or a repo path — whatever you've got.</p>
+    <input type="text" id="tgt" placeholder="https://acme.com   or   http://localhost:6006   or   ./packages/ui">
+    <p class="detect" id="tdetect" role="status" aria-live="polite"></p>
+    <p style="margin:12px 0 0"><label><input type="checkbox" id="ds2-toggle"> Optional: point it at your design system</label></p>
+    <div id="ds2-toggle-wrap" hidden style="margin-top:8px">
+      <p class="hint" style="margin-top:8px">Used to check your components against their own source patterns, not just the standard.</p>
+      <label class="lab" for="ds2">Design system reference</label>
+      <input type="text" id="ds2" placeholder="@acme/ds@2.4.1 · acme/ds@a1b2c3d" aria-describedby="ds2-hint">
+      <p class="hint" id="ds2-hint">Use a package name or repo reference for the design-system pattern check.</p>
+    </div>
+    <details style="margin-top:10px">
+      <summary>Optional: crawl this site instead of auditing one page</summary>
+      <p class="hint" id="crawl-hint" style="margin-top:8px">Choose whether the audit should follow same-origin links across a flow. The crawl stops at the page limit you set, up to 20 pages.</p>
+      <label class="lab" for="crawl-enabled">Follow same-origin pages</label>
+      <select id="crawl-enabled" aria-describedby="crawl-hint">
+        <option value="single">Audit just this page</option>
+        <option value="crawl">Crawl the site</option>
+      </select>
+      <label class="lab" for="crawl-pages" style="margin-top:10px">Maximum pages</label>
+      <input type="number" id="crawl-pages" min="1" max="20" value="20" aria-describedby="crawl-hint">
+    </details>
+  </div>
+
+  <div class="panel">
+    <pre class="out" id="out" tabindex="0" aria-label="Your generated prompt"></pre>
+    <div class="row" style="margin-top:12px">
+      <span class="status" id="st" role="status" aria-live="polite"></span>
+      <button type="button" class="act" id="copy">Copy my prompt</button>
+    </div>
+  </div>
+
+  <div class="panel" id="handoff-panel" hidden>
+    <p class="hint" style="margin-top:0">Handoff spec — a file to send your developer (ticket, PR description, design review), not another prompt.</p>
+    <div class="row" style="margin-top:12px">
+      <span class="status" id="handoff-st" role="status" aria-live="polite"></span>
+      <button type="button" class="act" id="handoff-download">Download handoff spec (.md)</button>
+    </div>
+  </div>
+
+  <p class="foot">Paste the result into Claude Code, Codex, Copilot, or any agentic coding tool. If the accessibility MCP server is connected, the check prompts will call its audit tools directly. See <a href="./index.html">the expert view</a> for WCAG level, platform targets, provenance tiers, and crawl options.</p>
+  </main>
+</div>
+<script type="module">
+const root = document.documentElement;
+const toggle = document.getElementById('theme-toggle');
+const storedTheme = localStorage.getItem('malimbeba-ui-theme');
+const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+const initialTheme = storedTheme || (systemPrefersDark ? 'dark' : 'light');
+const applyTheme = (theme) => {
+  root.setAttribute('data-theme', theme);
+  if (toggle) {
+    toggle.innerHTML = theme === 'dark' ? '<span aria-hidden="true">☀</span> Light mode' : '<span aria-hidden="true">🌙</span> Dark mode';
+    toggle.setAttribute('aria-pressed', String(theme === 'dark'));
+  }
+  localStorage.setItem('malimbeba-ui-theme', theme);
+};
+applyTheme(initialTheme);
+if (toggle) {
+  toggle.addEventListener('click', () => applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+  if (!localStorage.getItem('malimbeba-ui-theme')) {
+    applyTheme(event.matches ? 'dark' : 'light');
+  }
+});
+import { CATALOG, CATALOG_INDEX, catalogLabel } from "./generated/rules/catalog.js";
+import { buildPrompt as buildAccessiblePrompt, buildHandoffSpec, MAX_INLINE_IMAGE_DATA_URI_LENGTH } from "./generated/rules/promptBuilder.js";
+import { buildAuditPrompt, classifyAuditTarget } from "./generated/rules/auditPromptBuilder.js";
+
+(function(){
+var $=function(i){return document.getElementById(i);};
+var MAP=[
+ [["autocomplete","typeahead","type ahead","search and pick","searchable","search select","predictive","suggest"],"combobox"],
+ [["country picker","country select"],"combobox"],
+ [["dropdown","drop down","select box","picker"],"listbox"],
+ [["modal","dialog","popup","pop up","overlay","lightbox","confirm box","confirmation"],"dialog"],
+ [["kebab","hamburger","context menu","actions menu","overflow menu","menu button","three dot"],"menu button"],
+ [["tabs","tabbed","tab bar","tab panel"],"tabs"],
+ [["accordion","collapse","collapsible","expander","faq","disclosure","show more"],"accordion"],
+ [["data grid","datagrid","spreadsheet","sortable table","editable table","table"],"grid"],
+ [["tree grid","treegrid","nested table","hierarchical table"],"tree grid"],
+ [["tree","file explorer","folder view","nested list","hierarchy"],"tree view"],
+ [["date picker","datepicker","calendar","choose a date","pick a date"],"date picker"],
+ [["tooltip","hint","info bubble","help bubble","hover text"],"tooltip"],
+ [["radio","radio group","choose one option"],"radio"],
+ [["checkbox","check box","tick box","opt in"],"checkbox"],
+ [["text field","text input","input field","form field","search box","email field","text box"],"text input"],
+ [["link","anchor"],"link"],[["button","cta","submit"],"button"],
+ [["design system","component library","set of components","whole library"],"design system"]];
+// Plain-language "what is this" explainer, guided-mode-only UX copy (not
+// accessibility policy data, so it stays local rather than living in
+// catalog.ts alongside the tier/label/contract facts).
+var WHY={"combobox":"a text input with a filtered list of options","listbox":"a list of options the user picks from","dialog":"content shown over the page that takes focus","menu button":"a button that opens a list of actions","tabs":"panels switched by a row of tabs","accordion":"sections that expand and collapse","grid":"a two-dimensional grid you navigate with arrow keys","tree view":"a nested, expandable hierarchy","tree grid":"a hierarchy in a grid","date picker":"a calendar grid you navigate with arrow keys","tooltip":"supplementary text on hover and focus","button":"a native button","text input":"a native form field","link":"a native link","checkbox":"a native checkbox","radio":"a group of native radios","design system":"multiple components sharing tokens and conventions"};
+// Component list, tiers, labels, contracts, framework notes, and
+// non-negotiables all come from ./generated/ (imported above) — the same
+// compiled modules a11y_build_prompt and the expert view use.
+var mode="build";
+CATALOG.forEach(function(c){var o=document.createElement("option");o.value=c.component;o.textContent=c.label;$("pat").appendChild(o);});
+
+// Holds the last-selected screenshot in-memory for this tab only — never sent anywhere until the prompt is copied.
+var heldImage = { dataUri: undefined, name: "" };
+var heldHandoff = "";
+$("ds-image").addEventListener("change", function () {
+  var file = this.files && this.files[0];
+  var statusEl = $("ds-image-status"), previewEl = $("ds-image-preview");
+  if (!file) { heldImage = { dataUri: undefined, name: "" }; previewEl.hidden = true; statusEl.textContent = ""; return; }
+  $("ds").value = file.name;
+  var reader = new FileReader();
+  reader.onload = function () {
+    var dataUri = String(reader.result);
+    var tooLarge = dataUri.length > MAX_INLINE_IMAGE_DATA_URI_LENGTH;
+    heldImage = { dataUri: tooLarge ? undefined : dataUri, name: file.name };
+    previewEl.src = dataUri;
+    previewEl.alt = "Preview of uploaded screenshot: " + file.name;
+    previewEl.hidden = false;
+    statusEl.textContent = tooLarge
+      ? file.name + " (" + Math.round(file.size / 1024) + "KB) is too large to embed — it will be referenced by name only. Attach the original file to your agent yourself."
+      : file.name + " (" + Math.round(file.size / 1024) + "KB) will be embedded in the copied prompt as a Markdown image plus a raw data-URI fallback.";
+    render();
+  };
+  reader.readAsDataURL(file);
+});
+function detect(t){t=(t||"").toLowerCase();if(!t.trim())return null;
+ for(var i=0;i<MAP.length;i++)for(var j=0;j<MAP[i][0].length;j++)if(t.indexOf(MAP[i][0][j])!==-1)return MAP[i][1];
+ return null;}
+function kind(t){return classifyAuditTarget(t);}
+// Figma/XD links and screenshot filenames are design-file sources, not rendered artifacts — kept distinct from deployed/package/ci-build provenance.
+function designSource(){
+ var ds=$("ds").value.trim();
+ var dsKind = heldImage.name && ds === heldImage.name ? "screenshot" : !ds ? "none" : /figma\.com/i.test(ds) ? "figma" : /xd\.adobe\.com/i.test(ds) ? "xd" : /\.(png|jpe?g|gif|webp|svg)$/i.test(ds) ? "screenshot" : "deployed";
+ return { kind: dsKind, ref: ds || undefined, imageDataUri: dsKind === "screenshot" ? heldImage.dataUri : undefined };
+}
+function buildPrompt(){
+ var desc=$("desc").value.trim(),fw=$("fw").value;
+ var p=$("ovr").checked?$("pat").value:detect(desc);
+ if(!desc)return "Describe what you need above and your prompt will appear here, ready to copy.";
+ var lead;
+ if(p&&p!=="design system"){lead="This is a "+catalogLabel(p)+" — "+WHY[p]+".";}
+ else if(p==="design system"){lead="This spans multiple components — look up each one's standard W3C ARIA Authoring Practices Guide pattern before building it. Start with the simple controls, then the composite ones, and share tokens and naming across all of them.";}
+ else {lead="Work out which standard W3C ARIA Authoring Practices Guide pattern this matches before building, and say which pattern you picked.";}
+ return lead+"\n\n"+buildAccessiblePrompt({
+   task: desc,
+   component: p || undefined,
+   framework: fw,
+   designSystem: designSource(),
+   designTokens: $("ds-tokens").value.trim(),
+ });}
+// Same design-source/tokens facts as buildPrompt(), formatted as a standalone
+// document for a ticket or design review instead of an agent prompt.
+function buildHandoff(){
+ var desc=$("desc").value.trim();
+ if(!desc)return "";
+ var p=$("ovr").checked?$("pat").value:detect(desc);
+ return buildHandoffSpec({
+   task: desc,
+   component: p || undefined,
+   framework: $("fw").value,
+   designSystem: designSource(),
+   designTokens: $("ds-tokens").value.trim(),
+ });}
+// Maps this form's state directly onto the shared audit builder's input
+// shape. No prompt text is assembled here either — buildAuditPrompt()
+// (imported) is the only place that happens, so this UI can never drift
+// from a11y_build_audit_prompt or from ui/index.html's audit prompt.
+function checkPrompt(){
+ var t=$("tgt").value.trim(),ds=$("ds2").value.trim();
+ if(!t)return "Paste a URL or repo path above and your prompt will appear here, ready to copy.";
+ var crawl=$("crawl-enabled").value==="crawl";
+ var maxPages=Math.max(1,Math.min(25,parseInt($("crawl-pages").value,10)||20));
+ return buildAuditPrompt({ target: t, kind: "auto", crawl, maxPages, sourcePattern: ds || undefined });}
+function render(){
+ var isBuild=mode==="build";
+ $("build-side").hidden=!isBuild;$("check-side").hidden=isBuild;
+ document.querySelectorAll(".m-btn").forEach(function(b){b.setAttribute("aria-pressed",b.getAttribute("data-m")===mode?"true":"false");});
+ $("ds-toggle-wrap").hidden=!$("ds-toggle").checked;
+ $("ds2-toggle-wrap").hidden=!$("ds2-toggle").checked;
+ $("ovr-wrap").hidden=!$("ovr").checked;
+ if(isBuild){var p=$("ovr").checked?$("pat").value:detect($("desc").value),d=$("detect");
+  if(!$("desc").value.trim())d.textContent="Type above and the pattern will be worked out for you.";
+  else if(p)d.innerHTML="Detected: <strong>"+catalogLabel(p)+"</strong> (tier "+(CATALOG_INDEX.has(p)?CATALOG_INDEX.get(p).tier:"?")+"). Your prompt includes the full keyboard and focus contract for it.";
+  else d.textContent="No known pattern matched — your prompt will tell the agent to identify the right one and say which it picked.";}
+ else {var k=kind($("tgt").value),td=$("tdetect");
+  if(!k)td.textContent="Paste a target above.";
+  else if(k==="repo")td.innerHTML="Looks like a <strong>repo path</strong> — the prompt will start your preview and check components against their own patterns too.";
+  else if(k==="internal")td.innerHTML="Looks <strong>internal</strong> — checked against WCAG 2.2 A and AA <em>plus</em> your own design-system patterns.";
+  else td.innerHTML="Looks like a <strong>public site</strong> — checked against WCAG 2.2 Level A and AA.";}
+ $("out").textContent=isBuild?buildPrompt():checkPrompt();$("st").textContent="";
+ $("handoff-panel").hidden=!isBuild;
+ if(isBuild){heldHandoff=buildHandoff();$("handoff-st").textContent="";}}
+document.querySelectorAll(".m-btn").forEach(function(b){b.addEventListener("click",function(){mode=b.getAttribute("data-m");render();$("st").textContent=(mode==="build"?"Build something":"Check my work")+" selected.";});});
+document.addEventListener("input",render);document.addEventListener("change",render);
+$("copy").addEventListener("click",function(){var x=$("out").textContent;
+ function fb(){var ta=document.createElement("textarea");ta.value=x;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();
+  try{document.execCommand("copy");$("st").textContent="Copied — paste it into your agent";}catch(e){$("st").textContent="Press Ctrl/Cmd+C to copy";}document.body.removeChild(ta);}
+ if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(x).then(function(){$("st").textContent="Copied — paste it into your agent";},fb);}else fb();});
+$("handoff-download").addEventListener("click",function(){
+ if(!heldHandoff){$("handoff-st").textContent="Describe or pick a component first.";return;}
+ var blob=new Blob([heldHandoff],{type:"text/markdown"});
+ var url=URL.createObjectURL(blob);
+ var a=document.createElement("a");a.href=url;a.download="handoff-spec.md";
+ document.body.appendChild(a);a.click();document.body.removeChild(a);
+ URL.revokeObjectURL(url);
+ $("handoff-st").textContent="Downloaded handoff-spec.md — send it to your developer.";
+});
+$("desc").value="a dropdown where users search and pick their country";
+render();
+})();
+</script>
+</body>
+</html>

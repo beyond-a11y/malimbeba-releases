@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Malimbe by Beyond-A11y — component tester</title>
+<link rel="icon" type="image/png" href="assets/malimbe-favicon-32.png">
+<style>
+  :root{color-scheme:light;--bg:#F6F7F9;--surface:#fff;--ink:#14181F;--muted:#55606F;--line:#7C8798;--crit:#B4231C;--ser:#B45309;--mod:#4338CA;--mod-border:#4338CA;--pass:#15803D;--focus:#F59E0B;--chip-bg:#EEF0F5;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--sans:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;}
+  :root[data-theme="dark"]{color-scheme:dark;--bg:#07111D;--surface:#111C2A;--ink:#F3F6FB;--muted:#A8B4C2;--line:#263548;--crit:#FF7A7A;--ser:#F2A65A;--mod:#4338CA;--mod-border:#A5B4FC;--pass:#5CD69A;--focus:#F59E0B;--chip-bg:#17263A}
+  *{box-sizing:border-box}html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5}
+  .theme-toggle{display:inline-flex;align-items:center;gap:8px;margin-top:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 12px;font:inherit;font-weight:600;cursor:pointer}
+  .theme-toggle:hover,.theme-toggle:focus-visible{border-color:var(--mod-border);color:var(--mod-border)}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 64px}
+  .masthead{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:22px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+  h1{font-size:clamp(24px,4vw,34px);margin:0;letter-spacing:-.02em;font-weight:800}
+  .masthead p{color:var(--muted);max-width:66ch;margin:10px 0 0}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:820px){.grid{grid-template-columns:1fr}}
+  label.f{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
+  textarea{width:100%;font-family:var(--mono);font-size:12px;line-height:1.5;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface);color:var(--ink);resize:vertical}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:14px 0}
+  button{font:inherit;font-weight:600;min-height:44px;padding:0 16px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+  button.primary{background:var(--mod);color:#fff;border-color:var(--mod)}
+  a:focus-visible,button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;margin-top:14px}
+  .find{border-left:3px solid var(--line);padding:8px 0 8px 12px;margin:10px 0}
+  .find.critical{border-color:var(--crit)}.find.serious{border-color:var(--ser)}.find.moderate{border-color:var(--mod-border)}
+  .tag{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.05em;padding:2px 6px;border-radius:5px;background:var(--chip-bg);color:var(--muted)}
+  .snip{font-family:var(--mono);font-size:11px;background:var(--chip-bg);padding:2px 6px;border-radius:5px;word-break:break-all;color:var(--muted)}
+  iframe{width:100%;height:240px;border:1px solid var(--line);border-radius:10px;background:#fff}
+  .note{font-size:12px;color:var(--muted);max-width:70ch}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .sr-only:focus{position:static;width:auto;height:auto;margin:0;overflow:visible;clip:auto;white-space:normal;display:inline-block;padding:8px 14px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px}
+</style>
+</head>
+<body>
+<a href="#main-content" class="sr-only">Skip to main content</a>
+<div class="wrap">
+  <header class="masthead">
+    <p class="eyebrow"><img src="assets/malimbe-favicon-32.png" alt="" width="16" height="16" style="vertical-align:-2px;margin-right:6px">Malimbe · Component Tester<span id="back-link"></span></p>
+    <h1>Render your component, audit what actually appears.</h1>
+    <p>Web components build their markup at runtime inside shadow DOM, so parsing source finds nothing. This renders your code in an isolated frame and walks the flattened tree — checking computed contrast, real focus indicators, rendered target size, and shadow-scoped ARIA references.</p>
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false"><span aria-hidden="true">🌙</span> Dark mode</button>
+  </header>
+
+  <main id="main-content">
+    <div class="grid">
+      <div><label class="f" for="js">Component code (JS)</label><textarea id="js" rows="14" spellcheck="false"></textarea></div>
+      <div><label class="f" for="mk">Usage markup (HTML)</label><textarea id="mk" rows="14" spellcheck="false"></textarea></div>
+    </div>
+
+    <div class="row">
+      <button type="button" class="primary" id="run">Build &amp; audit rendered output</button>
+      <button type="button" id="bad">Load flawed sample</button>
+      <button type="button" id="good">Load fixed sample</button>
+      <span id="status" role="status" aria-live="polite" style="font-size:13px;color:var(--muted)"></span>
+    </div>
+
+    <section class="panel" aria-labelledby="rh"><h2 id="rh" style="font-size:15px;margin:0 0 8px">Audit results</h2><div id="out"></div></section>
+    <section class="panel" aria-labelledby="ph"><h2 id="ph" style="font-size:15px;margin:0 0 8px">Live render</h2><iframe id="frame" title="Rendered component preview"></iframe></section>
+
+    <p class="note" style="margin-top:16px"><strong>Provenance:</strong> a pasted snippet is a smoke test, not release evidence — no build step, no dependencies, no design tokens, no page context. For a release decision, audit the deployed app, the published package bundle, or a CI build at a commit, and record that provenance in <code>a11y_release_gate</code>. This page also cannot verify keyboard interaction flows or screen-reader output; those remain manual gates.</p>
+  </main>
+</div>
+<script>
+(function () {
+  "use strict";
+  var $ = function (i) { return document.getElementById(i); };
+
+  // Back-link to whichever tool launched this page. The query param is the
+  // primary, reliable signal (set by the links on guided.html/index.html);
+  // document.referrer is only a fallback for a bookmarked/typed URL, since
+  // some browsers and privacy settings strip it.
+  (function () {
+    var from = new URLSearchParams(location.search).get("from");
+    if (from !== "guided" && from !== "index") {
+      if (/\/guided\.html(\?|#|$)/.test(document.referrer)) from = "guided";
+      else if (/\/index\.html(\?|#|$)/.test(document.referrer)) from = "index";
+    }
+    if (from !== "guided" && from !== "index") return;
+    var el = $("back-link");
+    if (!el) return;
+    var a = document.createElement("a");
+    a.href = from === "guided" ? "./guided.html" : "./index.html";
+    a.textContent = "← Back to " + (from === "guided" ? "the guided door" : "the expert view");
+    a.style.marginLeft = "10px";
+    el.appendChild(a);
+  })();
+
+  var BAD_JS = "class BadDialog extends HTMLElement {\n" +
+    "  connectedCallback(){\n" +
+    "    this.attachShadow({mode:'open'}).innerHTML = `\n" +
+    "      <style>.m{background:#fff;color:#aaa;padding:16px}\n" +
+    "      .x{border:0;background:none;outline:none;width:18px;height:18px}</style>\n" +
+    "      <div class=\"m\" role=\"dialog\" aria-labelledby=\"ttl\">\n" +
+    "        <span class=\"x\" tabindex=\"3\">&#215;</span>\n" +
+    "        <p>Low contrast body text.</p>\n" +
+    "        <input placeholder=\"Email\">\n" +
+    "        <img src=\"i.png\">\n" +
+    "      </div>`;\n" +
+    "  }\n" +
+    "}\n" +
+    "customElements.define('bad-dialog', BadDialog);";
+  var BAD_MK = "<bad-dialog></bad-dialog>";
+
+  var GOOD_JS = "class GoodDialog extends HTMLElement {\n" +
+    "  connectedCallback(){\n" +
+    "    this.attachShadow({mode:'open'}).innerHTML = `\n" +
+    "      <style>.m{background:#fff;color:#111;padding:16px;border:1px solid #666}\n" +
+    "      button{min-width:44px;min-height:44px}</style>\n" +
+    "      <div class=\"m\" role=\"dialog\" aria-labelledby=\"ttl\" aria-modal=\"true\">\n" +
+    "        <h2 id=\"ttl\">Subscribe</h2>\n" +
+    "        <button type=\"button\" aria-label=\"Close dialog\">&#215;</button>\n" +
+    "        <p>Readable body text with sufficient contrast.</p>\n" +
+    "        <label for=\"em\">Email address</label>\n" +
+    "        <input id=\"em\" type=\"email\">\n" +
+    "        <img src=\"i.png\" alt=\"Product logo\">\n" +
+    "      </div>`;\n" +
+    "  }\n" +
+    "}\n" +
+    "customElements.define('good-dialog', GoodDialog);";
+  var GOOD_MK = "<good-dialog></good-dialog>";
+
+  var VALID_ROLES = new Set(["alert","alertdialog","application","article","banner","button","cell","checkbox","columnheader","combobox","complementary","contentinfo","dialog","document","feed","figure","form","grid","gridcell","group","heading","img","link","list","listbox","listitem","log","main","marquee","math","menu","menubar","menuitem","menuitemcheckbox","menuitemradio","meter","navigation","none","note","option","presentation","progressbar","radio","radiogroup","region","row","rowgroup","rowheader","scrollbar","search","searchbox","separator","slider","spinbutton","status","switch","tab","table","tablist","tabpanel","term","textbox","timer","toolbar","tooltip","tree","treegrid","treeitem"]);
+  var FOCUS_SEL = "a[href],button,input,select,textarea,[tabindex]";
+
+  function implicitRole(el) {
+    var t = el.tagName.toLowerCase();
+    if (/^h[1-6]$/.test(t)) return "heading";
+    var m = { button: "button", nav: "navigation", main: "main", ul: "list", ol: "list", li: "listitem", img: "img", article: "article", aside: "complementary", dialog: "dialog" };
+    if (m[t]) return m[t];
+    if (t === "a" && el.hasAttribute("href")) return "link";
+    if (t === "input") {
+      var ty = (el.getAttribute("type") || "text").toLowerCase();
+      return { checkbox: "checkbox", radio: "radio", button: "button", range: "slider", text: "textbox", search: "searchbox" }[ty] || null;
+    }
+    return null;
+  }
+  function snip(el) {
+    var a = [];
+    for (var i = 0; i < el.attributes.length; i++) {
+      var at = el.attributes[i];
+      a.push(at.value ? at.name + '="' + (at.value.length > 24 ? at.value.slice(0, 24) + "\u2026" : at.value) + '"' : at.name);
+    }
+    return "<" + el.tagName.toLowerCase() + (a.length ? " " + a.join(" ") : "") + ">";
+  }
+  function rootOf(el) { return el.getRootNode(); }
+  function named(el) {
+    if ((el.getAttribute("aria-label") || "").trim()) return true;
+    var lb = el.getAttribute("aria-labelledby");
+    if (lb && lb.trim().split(/\s+/).some(function (id) { return rootOf(el).querySelector('[id="' + id + '"]'); })) return true;
+    return !!(el.getAttribute("title") || "").trim();
+  }
+  function txt(el) { return (el.textContent || "").replace(/\s+/g, " ").trim(); }
+  function lum(c) {
+    var m = String(c).match(/[\d.]+/g);
+    if (!m || m.length < 3) return null;
+    if (m.length > 3 && parseFloat(m[3]) === 0) return null;
+    var f = m.slice(0, 3).map(function (v) { var s = v / 255; return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4); });
+    return 0.2126 * f[0] + 0.7152 * f[1] + 0.0722 * f[2];
+  }
+  function effBg(el, win) {
+    var n = el;
+    while (n && n.nodeType === 1) {
+      var b = win.getComputedStyle(n).backgroundColor;
+      if (b && !/rgba\(0, 0, 0, 0\)|transparent/.test(b)) return b;
+      n = n.parentElement || (n.getRootNode() && n.getRootNode().host);
+    }
+    return "rgb(255,255,255)";
+  }
+  function collect(root, out) {
+    var els = root.querySelectorAll("*");
+    for (var i = 0; i < els.length; i++) { out.push(els[i]); if (els[i].shadowRoot) collect(els[i].shadowRoot, out); }
+    return out;
+  }
+
+  function audit(doc, win) {
+    var all = collect(doc.body, []), F = [];
+    function add(imp, rule, wcag, el, detail, fix) {
+      F.push({ impact: imp, rule: rule, wcag: wcag, snippet: snip(el), detail: detail, fix: fix });
+    }
+    // Target size (WCAG 2.5.8), same logic as the server's render engine.
+    // Measured before the focus check below, because focus() scrolls.
+    var targets = targetBoxes(all, win);
+    all.forEach(function (el) {
+      var tag = el.tagName.toLowerCase();
+      if (tag === "img" && !el.hasAttribute("alt"))
+        add("critical", "img-alt", "1.1.1", el, "No alt attribute.", 'Add alt text, or alt="" if decorative.');
+      if (/^(input|select|textarea)$/.test(tag)) {
+        var ty = (el.getAttribute("type") || "text").toLowerCase();
+        if (!/hidden|button|submit|reset|image/.test(ty)) {
+          var id = el.getAttribute("id");
+          var lab = (id && rootOf(el).querySelector('label[for="' + id + '"]')) || el.closest("label");
+          if (!lab && !named(el))
+            add("critical", "control-label", "1.3.1, 4.1.2", el, "Control has no associated label or ARIA name.", "Add a <label for> in the same root, or aria-label.");
+          if ((el.getAttribute("placeholder") || "").trim() && !lab)
+            add("moderate", "placeholder-label", "1.3.1, 3.3.2", el, "Labelled only by a placeholder, which disappears on input.", "Add a persistent visible <label>.");
+        }
+      }
+      if (tag === "button" && !txt(el) && !named(el) && !el.querySelector("img[alt]:not([alt=''])"))
+        add("critical", "button-name", "4.1.2", el, "Button has no accessible name.", "Add text or aria-label.");
+      if (tag === "a" && el.hasAttribute("href") && !txt(el) && !named(el))
+        add("serious", "link-name", "2.4.4, 4.1.2", el, "Link has no accessible name.", "Add descriptive link text or aria-label.");
+      if (/^h[1-6]$/.test(tag) && !txt(el) && !named(el))
+        add("moderate", "empty-heading", "1.3.1", el, "Heading has no text.", "Give it text or remove it.");
+      var ti = el.getAttribute("tabindex");
+      if (ti !== null && Number(ti) > 0)
+        add("serious", "positive-tabindex", "2.4.3", el, 'tabindex="' + ti + '" overrides natural focus order.', 'Use tabindex="0" or "-1".');
+      var role = (el.getAttribute("role") || "").trim().toLowerCase();
+      if (role) {
+        if (!VALID_ROLES.has(role)) add("serious", "valid-role", "4.1.2", el, 'Unknown role "' + role + '".', "Use a defined WAI-ARIA role.");
+        var imp = implicitRole(el);
+        if (imp && role === imp) add("serious", "role-conflict", "4.1.2", el, 'role="' + role + '" is redundant with native <' + tag + ">.", "Remove the redundant role.");
+      }
+      ["aria-labelledby", "aria-describedby", "aria-controls", "aria-owns"].forEach(function (a) {
+        var v = el.getAttribute(a);
+        if (!v) return;
+        var miss = v.trim().split(/\s+/).filter(function (id) { return !rootOf(el).querySelector('[id="' + id + '"]'); });
+        if (miss.length)
+          add("serious", "aria-idref", "1.3.1, 4.1.2", el, a + " references missing id(s) in this root: " + miss.join(", ") + ".", "IDREFs do not cross the shadow boundary — reference an id in the same root.");
+      });
+      if (el.getAttribute("aria-hidden") === "true" && el.querySelector(FOCUS_SEL))
+        add("serious", "aria-hidden-focusable", "4.1.2", el, "Focusable descendants remain reachable while hidden from assistive tech.", "Remove aria-hidden or make descendants unfocusable.");
+      if (el.getAttribute("aria-disabled") === "true" && /^(button|input|select|textarea)$/.test(tag) && !el.hasAttribute("disabled"))
+        add("serious", "aria-disabled-only", "4.1.2", el, "aria-disabled set but the control is still operable.", "Add the native disabled attribute.");
+
+      var cs;
+      try { cs = win.getComputedStyle(el); } catch (e) { return; }
+      if (cs.display === "none" || cs.visibility === "hidden") return;
+
+      var own = Array.prototype.filter.call(el.childNodes, function (n) { return n.nodeType === 3 && n.textContent.trim(); }).length > 0;
+      if (own) {
+        var fg = lum(cs.color), bg = lum(effBg(el, win));
+        if (fg !== null && bg !== null) {
+          var hi = Math.max(fg, bg), lo = Math.min(fg, bg), ratio = (hi + 0.05) / (lo + 0.05);
+          var size = parseFloat(cs.fontSize) || 16, bold = (parseInt(cs.fontWeight, 10) || 400) >= 700;
+          var min = (size >= 24 || (size >= 18.66 && bold)) ? 3 : 4.5;
+          if (ratio < min)
+            add("serious", "contrast", "1.4.3", el, "Computed contrast " + ratio.toFixed(2) + ":1 is below the " + min + ":1 minimum.", "Adjust the colours, ideally in design tokens.");
+        }
+      }
+      if (el.matches && el.matches(FOCUS_SEL) && !el.hasAttribute("disabled")) {
+        try {
+          var prev = doc.activeElement;
+          el.focus();
+          var f = win.getComputedStyle(el);
+          var noOutline = f.outlineStyle === "none" || parseFloat(f.outlineWidth) === 0;
+          var noShadow = !f.boxShadow || f.boxShadow === "none";
+          if (noOutline && noShadow)
+            add("serious", "focus-visible", "2.4.7", el, "No visible focus indicator when focused (no outline or box-shadow).", "Provide a :focus-visible outline or ring.");
+          if (prev && prev.focus) prev.focus();
+        } catch (e) { /* ignore */ }
+      }
+    });
+    targetSizeFindings(targets, win).forEach(function (t) {
+      add("moderate", "target-size", "2.5.8", t.el, t.detail, "Increase the hit area to at least 24×24 CSS px, or space it so no other target is within that circle.");
+    });
+    return F;
+  }
+
+  // An undersized target is reported only when neither geometric exception
+  // applies: inline (in a line of text) or spacing (a 24px circle centred on
+  // it meets no other target and no other undersized target's circle).
+  function targetBoxes(all, win) {
+    function transparent(el) {
+      for (var n = el; n && n.nodeType === 1; n = n.parentElement || (n.getRootNode() && n.getRootNode().host))
+        if (win.getComputedStyle(n).opacity === "0") return true;
+      return false;
+    }
+    var out = [];
+    all.forEach(function (el) {
+      if (!el.matches || !el.matches(FOCUS_SEL) || el.hasAttribute("disabled")) return;
+      var s = win.getComputedStyle(el);
+      if (s.display === "none" || s.visibility === "hidden" || transparent(el)) return;
+      var r = el.getBoundingClientRect();
+      if (!(r.width > 0 && r.height > 0)) return;
+      if ((r.width <= 1 && r.height <= 1) || r.right <= 0 || r.bottom <= 0) return;
+      var boxes = Array.prototype.filter.call(el.getClientRects(), function (b) { return b.width > 0 && b.height > 0; });
+      out.push({ el: el, r: r, boxes: boxes.length ? boxes : [r] });
+    });
+    return out;
+  }
+  function targetSizeFindings(targets, win) {
+    function small(t) { return t.r.width < 24 || t.r.height < 24; }
+    function inSentence(el) {
+      if (win.getComputedStyle(el).display !== "inline") return false;
+      var b = el.parentElement;
+      while (b && win.getComputedStyle(b).display === "inline") b = b.parentElement;
+      if (!b) return false;
+      var w = el.ownerDocument.createTreeWalker(b, 4), n;
+      while ((n = w.nextNode())) {
+        if (!n.textContent.trim()) continue;
+        var t = n.parentElement && n.parentElement.closest(FOCUS_SEL);
+        if (t && b.contains(t)) continue;
+        return true;
+      }
+      return false;
+    }
+    function px(v) { return String(Math.floor(v * 10) / 10); }
+    var out = [];
+    targets.forEach(function (a) {
+      if (!small(a) || inSentence(a.el)) return;
+      var cx = a.r.left + a.r.width / 2, cy = a.r.top + a.r.height / 2, near = null;
+      for (var i = 0; i < targets.length && !near; i++) {
+        var b = targets[i];
+        if (b === a || b.el.contains(a.el) || a.el.contains(b.el)) continue;
+        var hitsRect = b.boxes.some(function (q) {
+          return Math.hypot(Math.max(q.left - cx, 0, cx - q.right), Math.max(q.top - cy, 0, cy - q.bottom)) < 12;
+        });
+        var hitsCircle = small(b) && Math.hypot(cx - (b.r.left + b.r.width / 2), cy - (b.r.top + b.r.height / 2)) < 24;
+        if (hitsRect || hitsCircle) near = b;
+      }
+      if (near) out.push({ el: a.el, detail: "Rendered target is " + px(a.r.width) + "×" + px(a.r.height) +
+        "px (below 24×24), and a 24px circle centred on it overlaps a neighbouring <" + near.el.tagName.toLowerCase() + "> target." });
+    });
+    return out;
+  }
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+  function show(F) {
+    var order = { critical: 0, serious: 1, moderate: 2 };
+    F.sort(function (a, b) { return order[a.impact] - order[b.impact]; });
+    var c = F.filter(function (f) { return f.impact === "critical"; }).length;
+    var s = F.filter(function (f) { return f.impact === "serious"; }).length;
+    var m = F.length - c - s;
+    if (F.length === 0) {
+      $("out").innerHTML = '<p style="margin:0;color:var(--pass);font-weight:600">No violations found in the rendered output.</p>' +
+        '<p class="note" style="margin:6px 0 0">Covers computed contrast, focus indicators, target size, and shadow-scoped ARIA. It cannot verify keyboard interaction flows or screen-reader output — those remain manual gates.</p>';
+      $("status").textContent = "No violations found.";
+      return;
+    }
+    var head = '<p style="margin:0 0 2px;font-weight:700;color:' + (c ? "var(--crit)" : "var(--ser)") + '">' +
+      (c ? "BLOCKED \u2014 " : "") + F.length + " issue(s) in the rendered output</p>" +
+      '<p class="note" style="margin:0 0 8px">' + c + " critical \u00b7 " + s + " serious \u00b7 " + m + " moderate</p>";
+    $("status").textContent = (c ? "Blocked \u2014 " : "") + F.length + " issue(s): " + c + " critical, " + s + " serious, " + m + " moderate.";
+    $("out").innerHTML = head + F.map(function (f) {
+      return '<div class="find ' + f.impact + '">' +
+        '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:3px"><span class="tag">' + f.impact + '</span>' +
+        '<strong style="font-size:13px">' + f.rule + '</strong><span class="note">WCAG ' + f.wcag + "</span></div>" +
+        '<div style="font-size:13px;margin-bottom:3px">' + esc(f.detail) + "</div>" +
+        '<div class="snip">' + esc(f.snippet) + "</div>" +
+        '<div class="note" style="margin-top:3px">Fix: ' + esc(f.fix) + "</div></div>";
+    }).join("");
+  }
+
+  function run() {
+    $("status").textContent = "Rendering\u2026";
+    var doc = '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
+      '<style>body{font-family:system-ui,sans-serif;margin:12px;color:#111}</style></head><body>' +
+      $("mk").value +
+      '<' + 'script type="module">try{' + $("js").value +
+      '}catch(e){document.body.insertAdjacentHTML("beforeend","<pre>"+e.message+"</pre>");}<' + '/script></body></html>';
+    var fr = $("frame");
+    fr.onload = function () {
+      setTimeout(function () {
+        try {
+          show(audit(fr.contentDocument, fr.contentWindow));
+        } catch (e) {
+          $("out").innerHTML = '<p style="color:var(--crit);margin:0">Audit error: ' + esc(e.message) + "</p>";
+          $("status").textContent = "Audit error: " + e.message;
+        }
+      }, 250);
+    };
+    fr.srcdoc = doc;
+  }
+
+  $("run").addEventListener("click", run);
+  $("bad").addEventListener("click", function () { $("js").value = BAD_JS; $("mk").value = BAD_MK; run(); });
+  $("good").addEventListener("click", function () { $("js").value = GOOD_JS; $("mk").value = GOOD_MK; run(); });
+  $("js").value = BAD_JS;
+  $("mk").value = BAD_MK;
+  run();
+})();
+
+</script>
+<script type="module">
+const root = document.documentElement;
+const toggle = document.getElementById('theme-toggle');
+const storedTheme = localStorage.getItem('malimbeba-ui-theme');
+const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+const initialTheme = storedTheme || (systemPrefersDark ? 'dark' : 'light');
+const applyTheme = (theme) => {
+  root.setAttribute('data-theme', theme);
+  if (toggle) {
+    toggle.innerHTML = theme === 'dark' ? '<span aria-hidden="true">☀</span> Light mode' : '<span aria-hidden="true">🌙</span> Dark mode';
+    toggle.setAttribute('aria-pressed', String(theme === 'dark'));
+  }
+  localStorage.setItem('malimbeba-ui-theme', theme);
+};
+applyTheme(initialTheme);
+if (toggle) {
+  toggle.addEventListener('click', () => applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+  if (!localStorage.getItem('malimbeba-ui-theme')) {
+    applyTheme(event.matches ? 'dark' : 'light');
+  }
+});
+</script>
+</body>
+</html>

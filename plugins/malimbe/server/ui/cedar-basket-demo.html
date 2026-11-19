@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cedar Basket | Neighborhood groceries</title>
+  <style>
+    :root { --ink:#15231b; --paper:#fffdf7; --green:#1e5b3b; --leaf:#dce8c4; --sun:#f4bd50; --line:#c7d2c3; --mist:#f0f5ed; font-family: Georgia, "Times New Roman", serif; color:var(--ink); background:var(--paper); }
+    * { box-sizing:border-box; } html { scroll-behavior:smooth; } body { margin:0; } a { color:inherit; } button, input { font:inherit; } button { cursor:pointer; }
+    :focus-visible { outline:3px solid #b45309; outline-offset:3px; } .skip { position:absolute; left:1rem; top:-4rem; z-index:4; background:#fff; padding:.7rem 1rem; } .skip:focus { top:1rem; }
+    .utility { background:var(--ink); color:#fff; padding:.5rem clamp(1rem,4vw,4rem); font:600 .84rem/1.3 system-ui,sans-serif; text-align:center; }
+    .shell { max-width:76rem; margin:auto; padding:0 clamp(1rem,4vw,4rem); } header { border-bottom:1px solid var(--line); background:var(--paper); position:relative; z-index:2; }
+    .bar { min-height:5.2rem; display:flex; align-items:center; gap:1.4rem; } .brand { color:var(--green); font-size:1.65rem; font-weight:700; letter-spacing:0; text-decoration:none; white-space:nowrap; } .brand span { color:#b45309; }
+    nav { margin-left:auto; } .links { display:flex; gap:1.35rem; padding:0; margin:0; list-style:none; font:600 .95rem/1.3 system-ui,sans-serif; } .links a { text-decoration:none; border-bottom:2px solid transparent; padding:.45rem 0; } .links a:hover { border-color:var(--green); }
+    .actions { display:flex; gap:.6rem; align-items:center; font:600 .9rem/1 system-ui,sans-serif; } .text-link { background:none; border:0; text-decoration:underline; padding:.6rem; } .menu-button { display:none; min-width:2.75rem; min-height:2.75rem; border:2px solid var(--green); border-radius:.25rem; background:#fff; color:var(--green); font:bold 1.2rem/1 system-ui,sans-serif; }
+    .mobile-menu { display:none; position:absolute; left:0; right:0; top:100%; border-bottom:2px solid var(--green); background:#fff; box-shadow:0 .75rem 1.5rem rgba(21,35,27,.12); } .mobile-menu[data-open="true"] { display:block; } .mobile-menu a { display:block; padding:1rem clamp(1rem,4vw,4rem); border-top:1px solid var(--line); font:600 1rem/1.25 system-ui,sans-serif; text-decoration:none; }
+    .hero { min-height:34rem; display:grid; grid-template-columns:minmax(0,1fr) minmax(18rem,.95fr); background:var(--leaf); } .hero-copy { align-self:center; padding:clamp(2rem,6vw,6rem); } .eyebrow { font:700 .78rem/1.2 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--green); } h1 { font-size:clamp(2.7rem,6vw,5.4rem); line-height:.95; margin:.6rem 0 1rem; font-weight:600; } .lede { max-width:34rem; font-size:1.15rem; line-height:1.6; } .button { display:inline-flex; min-height:2.9rem; align-items:center; justify-content:center; margin-top:1rem; padding:.7rem 1.1rem; border:2px solid var(--green); background:var(--green); color:#fff; font:700 .95rem/1 system-ui,sans-serif; text-decoration:none; } .button.secondary { margin-left:.5rem; background:transparent; color:var(--green); }
+    .hero img { width:100%; height:100%; min-height:22rem; object-fit:cover; } .section { padding:4.5rem 0; } h2 { font-size:clamp(2rem,4vw,3.15rem); margin:0 0 .6rem; line-height:1; } .section-intro { max-width:43rem; color:#3b4a40; font-size:1.08rem; }
+    .service-grid, .story-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-top:2rem; } .service, .story { border:1px solid var(--line); background:#fff; padding:1.4rem; } .service h3, .story h3 { margin:.8rem 0 .4rem; font-size:1.35rem; } .service p, .story p { color:#405045; line-height:1.5; } .service a { font:700 .92rem/1 system-ui,sans-serif; color:var(--green); }
+    .deal { background:var(--green); color:#fff; padding:3.4rem clamp(1rem,4vw,4rem); } .deal-inner { max-width:76rem; margin:auto; display:flex; align-items:center; justify-content:space-between; gap:2rem; } .deal h2 { max-width:35rem; } .deal .button { border-color:#fff; background:#fff; color:var(--green); margin:0; white-space:nowrap; }
+    .story { padding:0; overflow:hidden; } .story img { display:block; width:100%; aspect-ratio:1.2; object-fit:cover; } .story div { padding:1.25rem; } footer { border-top:1px solid var(--line); padding:2.5rem 0; background:var(--mist); } .footer-grid { display:flex; justify-content:space-between; gap:2rem; flex-wrap:wrap; } .footer-links { display:flex; flex-wrap:wrap; gap:1rem; font:600 .88rem/1.3 system-ui,sans-serif; } .footer-links a { text-underline-offset:.2rem; }
+    @media (max-width:48rem) { .links, .actions .text-link { display:none; } .menu-button { display:block; margin-left:auto; } .hero { grid-template-columns:1fr; } .hero img { min-height:18rem; order:-1; } .service-grid, .story-grid { grid-template-columns:1fr; } .deal-inner { display:block; } .deal .button { margin-top:1.25rem; } .button.secondary { display:none; } }
+    @media (forced-colors:active) { .button, .menu-button, .service, .story { border:2px solid CanvasText; } .button { background:ButtonFace; color:ButtonText; } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } * { transition:none !important; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to main content</a>
+  <header>
+    <p class="utility">Fresh delivery slots are available for Saturday morning.</p>
+    <div class="shell bar">
+      <a class="brand" href="#main" aria-label="Cedar Basket home">Cedar <span>Basket</span></a>
+      <nav aria-label="Primary navigation"><ul class="links"><li><a href="#shop">Shop</a></li><li><a href="#ideas">Kitchen notes</a></li><li><a href="#stores">Our stores</a></li></ul></nav>
+      <div class="actions"><button class="text-link" type="button">Find a store</button><button class="menu-button" id="menu-button" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open navigation">=</button></div>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" role="menu" aria-label="Mobile navigation" data-open="false">
+      <a role="menuitem" tabindex="-1" href="#shop">Shop</a><a role="menuitem" tabindex="-1" href="#ideas">Kitchen notes</a><a role="menuitem" tabindex="-1" href="#stores">Our stores</a><a role="menuitem" tabindex="-1" href="#stores">Find a store</a>
+    </div>
+  </header>
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title"><div class="hero-copy"><p class="eyebrow">Cedar Basket Market</p><h1 id="hero-title">Good food for ordinary, wonderful days.</h1><p class="lede">A neighborhood market for seasonal produce, pantry essentials, and dinner that feels easy.</p><a class="button" href="#shop">Build a basket</a><a class="button secondary" href="#stores">See nearby stores</a></div><img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1100&q=80" alt="A colorful produce display in a neighborhood market"></section>
+    <section class="section shell" id="shop" aria-labelledby="services-title"><p class="eyebrow">Choose your rhythm</p><h2 id="services-title">Groceries that meet you where you are.</h2><p class="section-intro">Order ahead, linger in the aisles, or ask a market guide for a dinner idea. Start with the option that fits today.</p><div class="service-grid"><article class="service"><p class="eyebrow">01</p><h3>Pickup window</h3><p>Choose a time and we will have your basket ready at the counter.</p><a href="#stores">Choose pickup</a></article><article class="service"><p class="eyebrow">02</p><h3>Doorstep delivery</h3><p>Keep the week moving with local delivery and clear substitutions.</p><a href="#stores">Check delivery</a></article><article class="service"><p class="eyebrow">03</p><h3>Market browse</h3><p>Find produce, bakery, and prepared foods in one calm trip.</p><a href="#ideas">Browse the market</a></article></div></section>
+    <section class="deal" aria-labelledby="deal-title"><div class="deal-inner"><div><p class="eyebrow" style="color:#f4bd50">This week at Cedar Basket</p><h2 id="deal-title">Three ingredients, one bright dinner.</h2></div><a class="button" href="#ideas">Get the recipe</a></div></section>
+    <section class="section shell" id="ideas" aria-labelledby="ideas-title"><p class="eyebrow">From our kitchen</p><h2 id="ideas-title">A little inspiration for the table.</h2><div class="story-grid"><article class="story"><img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80" alt="A colorful vegetable salad in a bowl"><div><h3>Market salad, no recipe required</h3><p>Build a crisp plate from whatever looks best in the produce aisle.</p><a href="#ideas">Read the note</a></div></article><article class="story"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80" alt="A table set with several shared dishes"><div><h3>Make weeknights feel shared</h3><p>Three flexible ideas for a table that does not need a special occasion.</p><a href="#ideas">Read the note</a></div></article><article class="story"><img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80" alt="Hands preparing vegetables in a home kitchen"><div><h3>Prep once, cook with ease</h3><p>A simple Sunday routine for a quieter week of meals.</p><a href="#ideas">Read the note</a></div></article></div></section>
+  </main>
+  <footer id="stores"><div class="shell footer-grid"><div><a class="brand" href="#main">Cedar <span>Basket</span></a><p>Neighborhood groceries, thoughtfully gathered.</p></div><div class="footer-links"><a href="#main">Accessibility</a><a href="#stores">Store help</a><a href="#ideas">Email updates</a><a href="#main">Privacy</a></div></div></footer>
+  <script>
+    const button = document.querySelector("#menu-button");
+    const menu = document.querySelector("#mobile-menu");
+    const items = [...menu.querySelectorAll('[role="menuitem"]')];
+    let active = 0;
+    function setActive(index) { active = (index + items.length) % items.length; items.forEach((item, itemIndex) => item.tabIndex = itemIndex === active ? 0 : -1); items[active].focus(); }
+    function closeMenu() { menu.dataset.open = "false"; button.setAttribute("aria-expanded", "false"); items.forEach(item => item.tabIndex = -1); button.focus(); }
+    function openMenu(first = 0) { menu.dataset.open = "true"; button.setAttribute("aria-expanded", "true"); setActive(first); }
+    button.addEventListener("click", () => menu.dataset.open === "true" ? closeMenu() : openMenu());
+    button.addEventListener("keydown", (event) => { if (["Enter", " ", "ArrowDown"].includes(event.key)) { event.preventDefault(); openMenu(); } if (event.key === "ArrowUp") { event.preventDefault(); openMenu(items.length - 1); } });
+    menu.addEventListener("keydown", (event) => { if (event.key === "Escape") { event.preventDefault(); closeMenu(); } else if (event.key === "ArrowDown") { event.preventDefault(); setActive(active + 1); } else if (event.key === "ArrowUp") { event.preventDefault(); setActive(active - 1); } else if (event.key === "Home") { event.preventDefault(); setActive(0); } else if (event.key === "End") { event.preventDefault(); setActive(items.length - 1); } });
+    menu.addEventListener("focusout", () => setTimeout(() => { if (!menu.contains(document.activeElement) && document.activeElement !== button && menu.dataset.open === "true") closeMenu(); }, 0));
+  </script>
+</body>
+</html>
